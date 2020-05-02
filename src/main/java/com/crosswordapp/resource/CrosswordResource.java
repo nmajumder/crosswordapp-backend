@@ -32,7 +32,7 @@ public class CrosswordResource {
         return crosswordService.findById(UUID.fromString(id));
     }
 
-    @PutMapping(PATH + "/{id}/{userid}")
+    @PutMapping(PATH + "/{id}/{userid}/update")
     public void updateCrossword(@RequestBody BoardRep board,
                                  @PathVariable String id, @PathVariable String userid) {
         logger.info("Saving board for crossword {} and user {}", id, userid);
@@ -45,14 +45,14 @@ public class CrosswordResource {
     }
 
     @PutMapping(PATH + "/{id}/{userid}/isComplete")
-    public Boolean crosswordIsComplete(@RequestBody BoardRep board,
+    public BoardRep crosswordIsComplete(@RequestBody BoardRep board,
                                        @PathVariable String id, @PathVariable String userid) {
         crosswordService.updateById(UUID.fromString(id), board);
         return crosswordService.crosswordIsComplete(UUID.fromString(id));
     }
 
     @PutMapping(PATH + "/{id}/{userid}/check/square")
-    public CrosswordRep checkSquare(@RequestBody BoardRep board,
+    public BoardRep checkSquare(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Checking square for crossword {} and user {}", id, userid);
         crosswordService.updateById(UUID.fromString(id), board);
@@ -60,7 +60,7 @@ public class CrosswordResource {
     }
 
     @PutMapping(PATH + "/{id}/{userid}/check/word")
-    public CrosswordRep checkWord(@RequestBody BoardRep board,
+    public BoardRep checkWord(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Checking word for crossword {} and user {}", id, userid);
         crosswordService.updateById(UUID.fromString(id), board);
@@ -68,7 +68,7 @@ public class CrosswordResource {
     }
 
     @PutMapping(PATH + "/{id}/{userid}/check/puzzle")
-    public CrosswordRep checkPuzzle(@RequestBody BoardRep board,
+    public BoardRep checkPuzzle(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Checking puzzle for crossword {} and user {}", id, userid);
         crosswordService.updateById(UUID.fromString(id), board);

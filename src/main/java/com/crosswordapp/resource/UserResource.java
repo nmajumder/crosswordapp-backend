@@ -1,6 +1,7 @@
 package com.crosswordapp.resource;
 
 import com.crosswordapp.object.User;
+import com.crosswordapp.rep.*;
 import com.crosswordapp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +19,29 @@ public class UserResource {
     @Autowired
     UserService userService;
 
-    @GetMapping(PATH + "/all")
-    public List<User> getAllUsers() {
-        return userService.findAll();
-    }
-
-    @GetMapping(PATH + "/{username}")
-    public User getUser(@PathVariable String username) {
-        return userService.findByUsername(username);
-    }
-
     @PostMapping(PATH + "/create")
-    public boolean createUser(@RequestBody User user) {
-        return userService.createUser(user.getUsername(), user.getPassword());
+    public UserResponseRep createUser(@RequestBody UserCreateRep user) {
+        return userService.createUser(user);
     }
+
+    @PostMapping(PATH + "/login")
+    public UserResponseRep loginUser(@RequestBody UserLoginRep user) {
+        return userService.loginUser(user);
+    }
+
+    @PostMapping(PATH + "/validate")
+    public UserResponseRep validateUser(@RequestBody UserValidationRep user) {
+        return userService.validateUser(user);
+    }
+
+    @PutMapping(PATH + "/link")
+    public UserResponseRep linkUser(@RequestBody UserLinkRep user) {
+        return userService.linkUser(user);
+    }
+
+    @PutMapping(PATH + "/settings")
+    public UserResponseRep saveSettings(@RequestBody SaveSettingsRep settings) {
+        return userService.saveSettings(settings);
+    }
+
 }

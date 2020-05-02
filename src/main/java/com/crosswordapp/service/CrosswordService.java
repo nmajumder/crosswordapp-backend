@@ -50,26 +50,27 @@ public class CrosswordService {
         }
     }
 
-    public boolean crosswordIsComplete(UUID id) {
+    public BoardRep crosswordIsComplete(UUID id) {
         Crossword c = StaticCrosswordService.getCrossword(id);
-        return c.getBoard().gridIsSolved();
+        c.getBoard().gridIsSolved();
+        return new BoardRep(c.getBoard(), false);
     }
 
-    public CrosswordRep checkCrossword(UUID id, CheckType type) {
+    public BoardRep checkCrossword(UUID id, CheckType type) {
         Crossword c = StaticCrosswordService.getCrossword(id);
         c.getBoard().check(type);
-        return new CrosswordRep(c);
+        return new BoardRep(c.getBoard(), false);
     }
 
     public BoardRep revealCrossword(UUID id, CheckType type) {
         Crossword c = StaticCrosswordService.getCrossword(id);
         c.getBoard().reveal(type);
-        return new BoardRep(c.getBoard());
+        return new BoardRep(c.getBoard(), false);
     }
 
     public BoardRep clearCrossword(UUID id, CheckType type) {
         Crossword c = StaticCrosswordService.getCrossword(id);
         c.getBoard().clear(type);
-        return new BoardRep(c.getBoard());
+        return new BoardRep(c.getBoard(), false);
     }
 }

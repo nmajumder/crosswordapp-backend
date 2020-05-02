@@ -1,8 +1,8 @@
 package com.crosswordapp;
 
-import com.crosswordapp.bean.ClueBean;
-import com.crosswordapp.bean.CrosswordBean;
-import com.crosswordapp.bean.CrosswordListBean;
+import com.crosswordapp.bean.crossword.ClueBean;
+import com.crosswordapp.bean.crossword.CrosswordBean;
+import com.crosswordapp.bean.crossword.CrosswordListBean;
 import com.crosswordapp.object.Board;
 import com.crosswordapp.object.Clue;
 import com.crosswordapp.object.ClueType;

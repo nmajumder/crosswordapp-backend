@@ -1,68 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <crosswordList>
     <crossword>
-        <title>Daily Mini</title>
-        <date>2020-04-20</date>
-        <grid>
-            <row>__FAT</row>
-            <row>IDAHO</row>
-            <row>SAVES</row>
-            <row>ATOMS</row>
-            <row>WAR__</row>
-        </grid>
-        <symmetry>DIAGONAL</symmetry>
-        <difficulty>MODERATE</difficulty>
-        <acrossClues>
-            <clue><num>1</num><text>White part of bacon</text></clue>
-            <clue><num>4</num><text>It separates Oregon from Wyoming</text></clue>
-            <clue><num>6</num><text>Presses Command-S</text></clue>
-            <clue><num>7</num><text>"Don't trust ___, they make up everything!" (joke) "</text></clue>
-            <clue><num>8</num><text>Civil ___ (supposed oxymoron)</text></clue>
-        </acrossClues>
-        <downClues>
-            <clue><num>1</num><text>Party souvenir</text></clue>
-            <clue><num>2</num><text>"Pardon me..."</text></clue>
-            <clue><num>3</num><text>Throw in the trash</text></clue>
-            <clue><num>4</num><text>The "vidi" of "Veni, vidi, vici"</text></clue>
-            <clue><num>5</num><text>Focus of FiveThirtyEight's journalism</text></clue>
-        </downClues>
-    </crossword>
-    <crossword>
-        <title>Saturday Mini</title>
-        <date>2020-04-19</date>
-        <grid>
-            <row>_TALKS_</row>
-            <row>_ALIEN_</row>
-            <row>AIRDROP</row>
-            <row>BCE_APE</row>
-            <row>CHAITEA</row>
-            <row>_IDRIS_</row>
-            <row>__YEN__</row>
-        </grid>
-        <symmetry>HORIZONTAL</symmetry>
-        <difficulty>MODERATE</difficulty>
-        <acrossClues>
-            <clue><num>1</num><text>Lectures</text></clue>
-            <clue><num>6</num><text>UFO Pilot</text></clue>
-            <clue><num>7</num><text>Transfer method between an iPhone and MacBook</text></clue>
-            <clue><num>9</num><text>Pre-A.D.</text></clue>
-            <clue><num>10</num><text>Gorilla or gibbon</text></clue>
-            <clue><num>11</num><text>Drink that's a spoonerism of 1-Down</text></clue>
-            <clue><num>13</num><text>Elba who played Stringer Bell on "The Wire"</text></clue>
-            <clue><num>14</num><text>Currency of Japan</text></clue>
-        </acrossClues>
-        <downClues>
-            <clue><num>1</num><text>Martial art that's a spoonerism of 11-Across</text></clue>
-            <clue><num>2</num><text>"So soon?"</text></clue>
-            <clue><num>3</num><text>Tupperware top</text></clue>
-            <clue><num>4</num><text>Protein that makes up hair and fingernails</text></clue>
-            <clue><num>5</num><text>Website that debunks urban legends</text></clue>
-            <clue><num>7</num><text>"The Bachelorette" airer</text></clue>
-            <clue><num>8</num><text>Food that can be catapulted with a spoon</text></clue>
-            <clue><num>12</num><text>Anger</text></clue>
-        </downClues>
-    </crossword>
-    <crossword>
         <title>It's All Relative</title>
         <date>2019-10-01</date>
         <grid>
@@ -295,7 +233,7 @@
             <clue><num>32</num><text>Delta hub</text></clue>
             <clue><num>33</num><text>Bodily reflex in a haunted house, maybe</text></clue>
             <clue><num>34</num><text>Place to drop a line</text></clue>
-            <clue><num>35</num><text>* Event where the starred answers might be found</text></clue>
+            <clue><num>35</num><text>Event where the starred answers might be found</text></clue>
             <clue><num>38</num><text>Inferiors of sgts.</text></clue>
             <clue><num>40</num><text>Makes a misstep</text></clue>
             <clue><num>41</num><text>Apt name for a lawyer</text></clue>
@@ -369,7 +307,7 @@
             <row>COULDNTBEBETTER</row>
             <row>ORC_ACE_PYRRHIC</row>
             <row>STAB_IRAQ_GOONS</row>
-            <row>_INCAS_SODUKU__</row>
+            <row>_INCAS_SUDOKU__</row>
             <row>NOTED_APIA_ETSY</row>
             <row>WNW_AMBIENT_QUE</row>
             <row>ASIP_OORT_ARUBA</row>
@@ -461,117 +399,6 @@
             <clue><num>58</num><text>Museo piece</text></clue>
             <clue><num>61</num><text>Ambient music pioneer Brian</text></clue>
             <clue><num>62</num><text>Mother in the forest</text></clue>
-        </downClues>
-    </crossword>
-    <crossword>
-        <title>Leveiss Wedding</title>
-        <date>2019-05-01</date>
-        <grid>
-            <row>HEBB_WSP__GAFFS</row>
-            <row>ATEE_EKE_GOBLUE</row>
-            <row>TANZANIA_ATHOME</row>
-            <row>___OPTIN_THOR__</row>
-            <row>SALSA_NUN_ARISE</row>
-            <row>IVY_TAGTEAM_DOC</row>
-            <row>NEECHY_SOB_MAYO</row>
-            <row>___AYE___IRE___</row>
-            <row>RIOT_ADO_DENVER</row>
-            <row>EDY_TREKKED_AXE</row>
-            <row>DISCO_ACE_HILTS</row>
-            <row>__TAPA_UNION___</row>
-            <row>PREMED_PORTUGAL</row>
-            <row>EUREKA_IBM_SODA</row>
-            <row>TESLA__DIA_ETSY</row>
-        </grid>
-        <symmetry>DIAGONAL</symmetry>
-        <difficulty>MODERATE</difficulty>
-        <acrossClues>
-            <clue><num>1</num><text>* First dance singer Bobby</text></clue>
-            <clue><num>5</num><text>* First kiss site, amid some Manhattan greenery: Abbr.</text></clue>
-            <clue><num>8</num><text>Hooks for landing a big one at sea</text></clue>
-            <clue><num>13</num><text>Perfectly, following "to"</text></clue>
-            <clue><num>14</num><text>Barely make, with "out"</text></clue>
-            <clue><num>15</num><text>* College cheer for Andrew</text></clue>
-            <clue><num>16</num><text>* Next stop for Allie and Andrew as a couple</text></clue>
-            <clue><num>18</num><text>* Where they were when the engagement began</text></clue>
-            <clue><num>19</num><text>Choose to participate</text></clue>
-            <clue><num>20</num><text>"Avengers: Endgame" character whose weight provides comic relief</text></clue>
-            <clue><num>21</num><text>Dip, or an activity involving dips</text></clue>
-            <clue><num>24</num><text>Sign of inaction when spinning a dreidel</text></clue>
-            <clue><num>26</num><text>Get up</text></clue>
-            <clue><num>29</num><text>Iconic brick wall covering</text></clue>
-            <clue><num>30</num><text>Pair of competitors, or a good approach to marriage</text></clue>
-            <clue><num>33</num><text>* The couple's go-to movie genre, for short</text></clue>
-            <clue><num>34</num><text>* Their four-legged friend (not the nihilist)</text></clue>
-            <clue><num>36</num><text>* Sound that might be heard at the ceremony</text></clue>
-            <clue><num>37</num><text>It's commonly found in a club</text></clue>
-            <clue><num>38</num><text>Often repeated affirmative</text></clue>
-            <clue><num>39</num><text>Wrath</text></clue>
-            <clue><num>41</num><text>It may leave you in stitches</text></clue>
-            <clue><num>44</num><text>Fuss</text></clue>
-            <clue><num>47</num><text>* Bachelor party locale</text></clue>
-            <clue><num>51</num><text>Eponymous ice cream maker</text></clue>
-            <clue><num>52</num><text>Made arduous progress</text></clue>
-            <clue><num>54</num><text>Fire, or what a fireman might carry</text></clue>
-            <clue><num>55</num><text>Many a '70s club</text></clue>
-            <clue><num>57</num><text>Blackjack boon, often</text></clue>
-            <clue><num>58</num><text>Handles for sharp implements</text></clue>
-            <clue><num>60</num><text>Spanish app</text></clue>
-            <clue><num>62</num><text>* Allie and Andrew are officially forming one this weekend</text></clue>
-            <clue><num>64</num><text>* Andrew's collegiate track, for a brief semester</text></clue>
-            <clue><num>66</num><text>* First international vacation destination as a couple</text></clue>
-            <clue><num>70</num><text>Triumphant cry attributed to Archimedes</text></clue>
-            <clue><num>71</num><text>Big Blue, or Allie's favorite cousin's employer &#128521;</text></clue>
-            <clue><num>72</num><text>Frequent mixer</text></clue>
-            <clue><num>73</num><text>* Andrew's ride and frequent stock pick</text></clue>
-            <clue><num>74</num><text>24 horas</text></clue>
-            <clue><num>75</num><text>Handmade crafts site</text></clue>
-        </acrossClues>
-        <downClues>
-            <clue><num>1</num><text>Follower of "top" or "high"</text></clue>
-            <clue><num>2</num><text>Seventh in a 24 letter alphabet</text></clue>
-            <clue><num>3</num><text>It's big in London</text></clue>
-            <clue><num>4</num><text>Last name that is #1 on a 2019 Forbes list</text></clue>
-            <clue><num>5</num><text>Took one's turn in a game</text></clue>
-            <clue><num>6</num><text>* The couple's favorite winter activity</text></clue>
-            <clue><num>7</num><text>Inconsequential stuff</text></clue>
-            <clue><num>8</num><text>* Nickname for the couple's longtime home</text></clue>
-            <clue><num>9</num><text>Detest</text></clue>
-            <clue><num>10</num><text>* Where they were when Andrew asked Allie to move in</text></clue>
-            <clue><num>11</num><text>Gridiron blunder, on the stat sheet</text></clue>
-            <clue><num>12</num><text>Call, in poker</text></clue>
-            <clue><num>15</num><text>Gangster's gun</text></clue>
-            <clue><num>17</num><text>Lack of interest</text></clue>
-            <clue><num>21</num><text>Act for which Vegas is nicknamed</text></clue>
-            <clue><num>22</num><text>One might be taken uptown in 8-Down</text></clue>
-            <clue><num>23</num><text>Strong base used for cleaning</text></clue>
-            <clue><num>25</num><text>"The Matrix" protagonist</text></clue>
-            <clue><num>27</num><text>Edamame source</text></clue>
-            <clue><num>28</num><text>Environmental beginning?</text></clue>
-            <clue><num>31</num><text>Annually</text></clue>
-            <clue><num>32</num><text>Tolerate</text></clue>
-            <clue><num>35</num><text>* ___ Bird (wedding jewelry designer)</text></clue>
-            <clue><num>37</num><text>Stag party goers</text></clue>
-            <clue><num>40</num><text>Mega popular</text></clue>
-            <clue><num>41</num><text>* Top tier cake color</text></clue>
-            <clue><num>42</num><text>Ugandan strongman Amin</text></clue>
-            <clue><num>43</num><text>* The couple's favorite happy hour snack, often at Mermaid</text></clue>
-            <clue><num>45</num><text>Anti-smuggling org.</text></clue>
-            <clue><num>46</num><text>* The couple's matchmaker</text></clue>
-            <clue><num>48</num><text>* Brother of 34-Across</text></clue>
-            <clue><num>49</num><text>No. on a business card, perhaps</text></clue>
-            <clue><num>50</num><text>Date night booking, for short</text></clue>
-            <clue><num>52</num><text>Brown v. Board of Education city</text></clue>
-            <clue><num>53</num><text>"Star Wars" last name</text></clue>
-            <clue><num>56</num><text>* College mascot for Allie</text></clue>
-            <clue><num>59</num><text>Occupied</text></clue>
-            <clue><num>61</num><text>Law with accessibility reqs.</text></clue>
-            <clue><num>63</num><text>Infamous 2017 storm</text></clue>
-            <clue><num>64</num><text>* 34-Across, or what you might do to him</text></clue>
-            <clue><num>65</num><text>Deeply regret</text></clue>
-            <clue><num>67</num><text>Ultra popular TV show, for short</text></clue>
-            <clue><num>68</num><text>Source of rev. for many platforms</text></clue>
-            <clue><num>69</num><text>Install, as carpeting</text></clue>
         </downClues>
     </crossword>
     <crossword>
@@ -1454,10 +1281,10 @@
         <symmetry>DIAGONAL</symmetry>
         <difficulty>EXPERT</difficulty>
         <acrossClues>
-            <clue><num>1</num><text>Capture a Checkers piece</text></clue>
-            <clue><num>5</num><text>Sailor's sheet, e.g.</text></clue>
-            <clue><num>9</num><text>Road rescue</text></clue>
-            <clue><num>12</num><text>Operate a rig</text></clue>
+            <clue><num>1</num><text>* Capture a Checkers piece</text></clue>
+            <clue><num>5</num><text>* Sailor's sheet, e.g.</text></clue>
+            <clue><num>9</num><text>* Road rescue</text></clue>
+            <clue><num>12</num><text>* Operate a rig</text></clue>
             <clue><num>17</num><text>Is in the doldrums</text></clue>
             <clue><num>18</num><text>Homer's Trojan War hero</text></clue>
             <clue><num>19</num><text>Wrath</text></clue>
@@ -1471,9 +1298,9 @@
             <clue><num>30</num><text>Caucasus mountain village</text></clue>
             <clue><num>31</num><text>Expelled material, as from a volcano</text></clue>
             <clue><num>34</num><text>Residence of 96-Across</text></clue>
-            <clue><num>36</num><text>Get acquitted</text></clue>
-            <clue><num>38</num><text>Assassinate</text></clue>
-            <clue><num>39</num><text>Corporal punishment instrument</text></clue>
+            <clue><num>36</num><text>* Get acquitted</text></clue>
+            <clue><num>38</num><text>* Assassinate</text></clue>
+            <clue><num>39</num><text>* Corporal punishment instrument</text></clue>
             <clue><num>41</num><text>Bathroom feature common in Europe</text></clue>
             <clue><num>46</num><text>Understated</text></clue>
             <clue><num>49</num><text>Easter preceder?</text></clue>
@@ -1489,7 +1316,7 @@
             <clue><num>66</num><text>Not deceived by</text></clue>
             <clue><num>68</num><text>US president for 6 months</text></clue>
             <clue><num>70</num><text>Strasbourg summer</text></clue>
-            <clue><num>71</num><text>Shoot the bull</text></clue>
+            <clue><num>71</num><text>* Shoot the bull</text></clue>
             <clue><num>73</num><text>Weight deduction</text></clue>
             <clue><num>74</num><text>Long-time NBC com.</text></clue>
             <clue><num>77</num><text>Restates, as a plan</text></clue>
@@ -1506,8 +1333,8 @@
             <clue><num>98</num><text>Actor McShane</text></clue>
             <clue><num>100</num><text>Round a bend at a dangerous speed</text></clue>
             <clue><num>104</num><text>Invited to one's apartment</text></clue>
-            <clue><num>105</num><text>Ally</text></clue>
-            <clue><num>108</num><text>Blue shower cause, perhaps</text></clue>
+            <clue><num>105</num><text>* Ally</text></clue>
+            <clue><num>108</num><text>* Blue shower cause, perhaps</text></clue>
             <clue><num>109</num><text>Say "You know you want to do it"</text></clue>
             <clue><num>113</num><text>Nursery rhyme "fetched" hilltop item</text></clue>
             <clue><num>114</num><text>Covered walk lined with shops</text></clue>
@@ -1522,10 +1349,10 @@
             <clue><num>133</num><text>Verb ending?</text></clue>
             <clue><num>134</num><text>Mountains dividing Europe and Asia</text></clue>
             <clue><num>135</num><text>Church tower topper</text></clue>
-            <clue><num>136</num><text>Long-term casino winner</text></clue>
-            <clue><num>137</num><text>On the town, say</text></clue>
-            <clue><num>138</num><text>Route through a mountain range</text></clue>
-            <clue><num>139</num><text>Campus building</text></clue>
+            <clue><num>136</num><text>* Long-term casino winner</text></clue>
+            <clue><num>137</num><text>* On the town, say</text></clue>
+            <clue><num>138</num><text>* Route through a mountain range</text></clue>
+            <clue><num>139</num><text>* Campus building</text></clue>
         </acrossClues>
         <downClues>
             <clue><num>1</num><text>First word in a California national park</text></clue>
@@ -1545,7 +1372,7 @@
             <clue><num>15</num><text>Key always used with others: Abbr.</text></clue>
             <clue><num>16</num><text>Japanese aristocratic class since the 8th century</text></clue>
             <clue><num>17</num><text>Colorful rainforest dweller</text></clue>
-            <clue><num>21</num><text>Base layer</text></clue>
+            <clue><num>21</num><text>* Base layer</text></clue>
             <clue><num>24</num><text>Shredded side</text></clue>
             <clue><num>27</num><text>"Ouch!"</text></clue>
             <clue><num>29</num><text>"Pipe down!"</text></clue>
@@ -1555,15 +1382,15 @@
             <clue><num>35</num><text>Unit for a plot</text></clue>
             <clue><num>37</num><text>Host of "Project Runway"</text></clue>
             <clue><num>40</num><text>Rival football club of 13-Down, colloquially</text></clue>
-            <clue><num>41</num><text>Group of directors</text></clue>
+            <clue><num>41</num><text>* Group of directors</text></clue>
             <clue><num>42</num><text>Mischievous one</text></clue>
             <clue><num>43</num><text>Raised platform for a lectern</text></clue>
             <clue><num>44</num><text>Conditional catch-all</text></clue>
-            <clue><num>45</num><text>Prison sentence</text></clue>
+            <clue><num>45</num><text>* Prison sentence</text></clue>
             <clue><num>47</num><text>___ account (never)</text></clue>
             <clue><num>48</num><text>___-hoo</text></clue>
             <clue><num>50</num><text>Like the 2-D shape formed with 3 different-length line segments</text></clue>
-            <clue><num>51</num><text>Encrust</text></clue>
+            <clue><num>51</num><text>* Encrust</text></clue>
             <clue><num>52</num><text>Settled, as on a branch</text></clue>
             <clue><num>53</num><text>Popular matrimony period</text></clue>
             <clue><num>55</num><text>Com alternative</text></clue>
@@ -1577,13 +1404,13 @@
             <clue><num>72</num><text>Youngster</text></clue>
             <clue><num>74</num><text>Discard</text></clue>
             <clue><num>75</num><text>Film genre that is a color in French</text></clue>
-            <clue><num>76</num><text>Actor's recollection</text></clue>
-            <clue><num>77</num><text>Alkali metals, for one</text></clue>
+            <clue><num>76</num><text>* Actor's recollection</text></clue>
+            <clue><num>77</num><text>* Alkali metals, for one</text></clue>
             <clue><num>78</num><text>"Twenty Thousand Leagues Under the Sea" author</text></clue>
             <clue><num>79</num><text>Computer file suffix</text></clue>
             <clue><num>80</num><text>Bob who led Canada's Liberal Party</text></clue>
-            <clue><num>82</num><text>Manipulate with trickery</text></clue>
-            <clue><num>84</num><text>Trawler haul</text></clue>
+            <clue><num>82</num><text>* Manipulate with trickery</text></clue>
+            <clue><num>84</num><text>* Trawler haul</text></clue>
             <clue><num>85</num><text>What an integral estimates</text></clue>
             <clue><num>86</num><text>Pigeon-___</text></clue>
             <clue><num>89</num><text>Public health org.</text></clue>
@@ -1599,10 +1426,10 @@
             <clue><num>107</num><text>Draft, as a contract</text></clue>
             <clue><num>110</num><text>Like a low-scoring World Cup game, maybe</text></clue>
             <clue><num>111</num><text>Twisting dizzily</text></clue>
-            <clue><num>112</num><text>Charleston, e.g.</text></clue>
+            <clue><num>112</num><text>* Charleston, e.g.</text></clue>
             <clue><num>113</num><text>Dweller of il mare</text></clue>
             <clue><num>115</num><text>"The Nutcracker" girl</text></clue>
-            <clue><num>117</num><text>Theodor Geisel's hat wearer</text></clue>
+            <clue><num>117</num><text>* Theodor Geisel's hat wearer</text></clue>
             <clue><num>118</num><text>Sister of Rachel in the Bible</text></clue>
             <clue><num>119</num><text>___ Domini</text></clue>
             <clue><num>120</num><text>Option list</text></clue>

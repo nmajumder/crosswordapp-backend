@@ -25,7 +25,7 @@ public class CrosswordRep {
         this.title = crossword.getTitle();
         this.date = crossword.getDate();
         this.difficulty = crossword.getDifficulty();
-        this.board = new BoardRep(crossword.getBoard());
+        this.board = new BoardRep(crossword.getBoard(), false);
         this.acrossClues = new ArrayList<>();
         for (Integer i: crossword.getClueManager().getAcrossClueMap().keySet()) {
             Clue clue = crossword.getClueManager().getAcrossClueMap().get(i);

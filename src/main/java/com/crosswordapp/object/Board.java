@@ -22,14 +22,14 @@ public class Board {
 
     private Integer numSeconds;
 
-    public Board(List<String> xmlGridRows, Symmetry sym) {
-        if (!xmlGridIsValid(xmlGridRows, sym)) {
+    public Board(List<String> gridRows, Symmetry sym) {
+        if (!xmlGridIsValid(gridRows, sym)) {
             throw new RuntimeException("Failed to create new board, check logs for errors");
         }
-        this.height = xmlGridRows.size();
-        this.width = xmlGridRows.get(0).length();
+        this.height = gridRows.size();
+        this.width = gridRows.get(0).length();
         this.solution = new ArrayList<>();
-        for (String row: xmlGridRows) {
+        for (String row: gridRows) {
             List<String> solutionRow = Arrays.asList(row.split(""));
             this.solution.add(solutionRow);
         }
@@ -47,13 +47,17 @@ public class Board {
             }
         }
 
+        resetSquareSelection();
+
+        numSeconds = 0;
+    }
+
+    private void resetSquareSelection() {
         int c = 0;
         while (this.grid.get(0).get(c).getValue().equals("_")) {
             c++;
         }
-        selection = new SquareSelection(0, c, ClueType.Across);
-
-        numSeconds = 0;
+        this.selection = new SquareSelection(0, c, ClueType.Across);
     }
 
     private boolean xmlGridIsValid(List<String> rows, Symmetry sym) {
@@ -94,11 +98,11 @@ public class Board {
             acrossClueNum = counter;
             acrossWordInd = 0;
         }
-        Integer downWordInd = null;
         Integer downClueNum = null;
+        Integer downWordInd = null;
         if (row == 0 || solution.get(row-1).get(col).equals("_")) {
             downClueNum = counter;
-            acrossWordInd = 0;
+            downWordInd = 0;
         }
 
         // set the clue number on this square if any
@@ -118,7 +122,6 @@ public class Board {
                 c--;
                 acrossWordInd++;
             }
-            acrossWordInd--;
             if (acrossClueNum == null) {
                 logger.error("Unable to find across clue num at coords (" + row + "," + col + ")");
             }
@@ -134,7 +137,6 @@ public class Board {
                 r--;
                 downWordInd++;
             }
-            downWordInd--;
             if (downClueNum == null) {
                 logger.error("Unable to find down clue num at coords (" + row + "," + col + ")");
             }
@@ -205,7 +207,16 @@ public class Board {
                 }
             }
         }
+        markComplete();
         return true;
+    }
+
+    private void markComplete() {
+        for (int r = 0; r < this.height; r++) {
+            for (int c = 0; c < this.width; c++) {
+                grid.get(r).get(c).setStatus(SquareCheckStatus.Complete);
+            }
+        }
     }
 
     public Pair<Integer, Integer> getCoordinatesOfNumber(Integer clueNumber) {
@@ -220,6 +231,29 @@ public class Board {
         }
         logger.error("Unable to find coordinates of clue number: " + clueNumber);
         return null;
+    }
+
+    public String getAnswerForClueNum(Integer clueNumber, ClueType type) {
+        Pair<Integer, Integer> coords = getCoordinatesOfNumber(clueNumber);
+        if (coords == null) {
+            logger.error("Unable to get answer length of nonexistent clue number: " + clueNumber);
+            return null;
+        }
+        int r = coords.getValue0();
+        int c = coords.getValue1();
+        StringBuilder sb = new StringBuilder();
+        if (type.equals(ClueType.Across)) {
+            while (c < this.width && !this.solution.get(r).get(c).equals("_")) {
+                sb.append(this.solution.get(r).get(c));
+                c++;
+            }
+        } else {
+            while (r < this.height && !this.solution.get(r).get(c).equals("_")) {
+                sb.append(this.solution.get(r).get(c));
+                r++;
+            }
+        }
+        return sb.toString();
     }
 
     public Integer getLengthOfAnswer(Integer clueNumber, ClueType type) {
@@ -312,7 +346,8 @@ public class Board {
 
     private void checkSquare(int r, int c) {
         BoardSquare square = this.grid.get(r).get(c);
-        if (square.getValue().equals("") || square.getValue().equals("_")) {
+        if (square.getValue().equals("") || square.getValue().equals("_") ||
+                square.getStatus().equals(SquareCheckStatus.Revealed)) {
             return;
         } else if (square.getValue().equals(this.solution.get(r).get(c))) {
             logger.info("Found correct check, setting status to CheckedTrue");
@@ -325,11 +360,20 @@ public class Board {
 
     private void revealSquare(int r, int c) {
         BoardSquare square = this.grid.get(r).get(c);
-        if (square.getValue().equals("_")) {
+        if (square.getValue().equals("_") || square.getStatus().equals(SquareCheckStatus.CheckedTrue)) {
             return;
         }
         square.setValue(this.solution.get(r).get(c));
         square.setStatus(SquareCheckStatus.Revealed);
+    }
+
+    private void clearSquare(int r, int c) {
+        BoardSquare square = this.grid.get(r).get(c);
+        if (square.getValue().equals("_")) {
+            return;
+        }
+        square.setValue("");
+        square.setStatus(SquareCheckStatus.Unchecked);
     }
 
     private void checkWord() {
@@ -379,14 +423,14 @@ public class Board {
             int wordInd = this.grid.get(r).get(c).getAcrossWordIndex();
             int x = c - wordInd;
             while (x < this.width && !this.grid.get(r).get(x).getValue().equals("_")) {
-                this.grid.get(r).get(c).setValue("");
+                clearSquare(r, x);
                 x++;
             }
         } else {
             int wordInd = this.grid.get(r).get(c).getDownWordIndex();
             int y = r - wordInd;
             while (y < this.height && !this.grid.get(y).get(c).getValue().equals("_")) {
-                this.grid.get(y).get(c).setValue("");
+                clearSquare(y, c);
                 y++;
             }
         }
@@ -411,8 +455,9 @@ public class Board {
     private void clearPuzzle() {
         for (int r = 0; r < this.height; r++) {
             for (int c = 0; c < this.width; c++) {
-                this.grid.get(r).get(c).setValue("");
+                clearSquare(r,c);
             }
         }
+        resetSquareSelection();
     }
 }
