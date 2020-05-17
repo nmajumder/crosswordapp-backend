@@ -3,6 +3,7 @@ package com.crosswordapp.generation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
 import java.time.Instant;
 import java.util.*;
 
@@ -32,28 +33,33 @@ public class GenerationApp {
             entryOptions.add(w);
         }
         boolean solved = solve(grid, entryOptions, chosenValues, solution);
+
         if (solved) {
-            logger.info("Puzzle solved!");
+            grid.printGrid();
+            String solveTime = String.valueOf((Instant.now().toEpochMilli() - startTime.toEpochMilli()) / 1000);
+            logger.info("Puzzle created in " + solveTime + " seconds");
+            return grid;
         } else {
             if (timedOut) {
                 logger.info("Could not find solution in time limit");
             } else {
                 logger.info("No solution found");
             }
+            return null;
         }
-        return grid;
     }
 
     private static boolean solve(Grid grid, List<Word> entryOptions, List<Integer> chosenValues, Deque<Assignment> solution) {
         // check for timeout (15 seconds)
-        if (timedOut || Instant.now().toEpochMilli() - startTime.toEpochMilli() > 15000) {
+        if (timedOut) return false;
+        if (Instant.now().toEpochMilli() - startTime.toEpochMilli() > 12000) {
             timedOut = true;
+            grid.printGrid();
             return false;
         }
 
         // choose slot to fill
         Word chosenEntry = chooseEntry(entryOptions, chosenValues);
-        //System.out.println("Chose entry: " + chosenEntry.toString());
 
         // find words that could fill that slot
         List<Integer> valueOptions = lex.findMatches(chosenEntry.toString(), chosenValues);
@@ -66,7 +72,7 @@ public class GenerationApp {
             grid.setWord(chosenEntry, lex.getWord(chosenValue));
             chosenValues.add(chosenValue);
             solution.push(assignment);
-            grid.printGrid();
+            //grid.printGrid();
 
             if (entryOptions.isEmpty()) {
                 valueOptions = null;
@@ -84,6 +90,7 @@ public class GenerationApp {
                 valueOptions = null;
                 return true;
             } else {
+                if (timedOut) return false;
                 // if we reach here through failure, roll back to prev grid
                 chosenValues.remove(chosenValues.size()-1);
                 solution.pop();
@@ -143,12 +150,11 @@ public class GenerationApp {
         }
 
         int maxSum = 0;
-        int sum = 0;
         int bestWordInd = -1;
         for (int i = 0; i < numChoices; i++) {
             String word = lex.getWord(valueOptions.get(valInds.get(i)));
             grid.setWord(entry, word);
-            sum = 0;
+            int sum = 0;
             for (int j = 0; j < words.size(); j++) {
                 if (words.get(j).toString().equals(patterns.get(j))) {
                     sum += options.get(j);
@@ -166,6 +172,9 @@ public class GenerationApp {
 
         //System.out.println("Choosing value " + lex.getWord(valueOptions.get(bestWordInd)) + " for entry " + entry.toString());
 
+        if (bestWordInd == -1) {
+            bestWordInd = (int) Math.floor(Math.random() * valueOptions.size());
+        }
         int bestWordKey = valueOptions.get(bestWordInd);
         valueOptions.remove(bestWordInd);
         return bestWordKey;

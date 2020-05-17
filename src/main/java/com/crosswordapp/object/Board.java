@@ -1,5 +1,6 @@
 package com.crosswordapp.object;
 
+import com.crosswordapp.generation.Square;
 import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,17 +48,20 @@ public class Board {
             }
         }
 
-        resetSquareSelection();
+        this.selection = new SquareSelection();
+        resetSquareSelection(this.selection);
 
         numSeconds = 0;
     }
 
-    private void resetSquareSelection() {
+    private void resetSquareSelection(SquareSelection selection) {
         int c = 0;
         while (this.grid.get(0).get(c).getValue().equals("_")) {
             c++;
         }
-        this.selection = new SquareSelection(0, c, ClueType.Across);
+        selection.setRowCoord(0);
+        selection.setColCoord(c);
+        selection.setDirection(ClueType.Across);
     }
 
     private boolean xmlGridIsValid(List<String> rows, Symmetry sym) {
@@ -199,7 +203,7 @@ public class Board {
         return true;
     }
 
-    public boolean gridIsSolved() {
+    public boolean gridIsSolved(List<List<BoardSquare>> grid) {
         for (int r = 0; r < this.height; r++) {
             for (int c = 0; c < this.width; c++) {
                 if (!grid.get(r).get(c).getValue().equals(this.solution.get(r).get(c))) {
@@ -207,11 +211,11 @@ public class Board {
                 }
             }
         }
-        markComplete();
+        markComplete(grid);
         return true;
     }
 
-    private void markComplete() {
+    private void markComplete(List<List<BoardSquare>> grid) {
         for (int r = 0; r < this.height; r++) {
             for (int c = 0; c < this.width; c++) {
                 grid.get(r).get(c).setStatus(SquareCheckStatus.Complete);
@@ -302,64 +306,57 @@ public class Board {
 
     /***** CHECK, REVEAL, CLEAR FUNCTIONS *****/
 
-    public void check(CheckType type) {
+    public void check(CheckType type, List<List<BoardSquare>> grid, SquareSelection selection) {
         switch (type) {
             case Square:
-                checkSquare(this.selection.getRowCoord(), this.selection.getColCoord());
+                checkSquare(selection.getRowCoord(), selection.getColCoord(), grid);
                 break;
             case Word:
-                checkWord();
+                checkWord(grid, selection);
                 break;
             case Puzzle:
-                checkPuzzle();
+                checkPuzzle(grid);
                 break;
         }
     }
 
-    public void reveal(CheckType type) {
+    public void reveal(CheckType type, List<List<BoardSquare>> grid, SquareSelection selection) {
         switch (type) {
             case Square:
-                revealSquare(this.selection.getRowCoord(), this.selection.getColCoord());
+                revealSquare(selection.getRowCoord(), selection.getColCoord(), grid);
                 break;
             case Word:
-                revealWord();
+                revealWord(grid, selection);
                 break;
             case Puzzle:
-                revealPuzzle();
+                revealPuzzle(grid);
                 break;
         }
     }
 
-    public void clear(CheckType type) {
-        switch (type) {
-            case Square:
-                logger.error("Clearing a square is not supported (just hit the delete key)");
-                break;
-            case Word:
-                clearWord();
-                break;
-            case Puzzle:
-                clearPuzzle();
-                break;
+    public void reset(List<List<BoardSquare>> grid, SquareSelection selection) {
+        for (int r = 0; r < this.height; r++) {
+            for (int c = 0; c < this.width; c++) {
+                clearSquare(r, c, grid);
+            }
         }
+        resetSquareSelection(selection);
     }
 
-    private void checkSquare(int r, int c) {
-        BoardSquare square = this.grid.get(r).get(c);
+    private void checkSquare(int r, int c, List<List<BoardSquare>> grid) {
+        BoardSquare square = grid.get(r).get(c);
         if (square.getValue().equals("") || square.getValue().equals("_") ||
                 square.getStatus().equals(SquareCheckStatus.Revealed)) {
             return;
         } else if (square.getValue().equals(this.solution.get(r).get(c))) {
-            logger.info("Found correct check, setting status to CheckedTrue");
             square.setStatus(SquareCheckStatus.CheckedTrue);
         } else {
-            logger.info("Found incorrect check, setting status to CheckedFalse");
             square.setStatus(SquareCheckStatus.CheckedFalse);
         }
     }
 
-    private void revealSquare(int r, int c) {
-        BoardSquare square = this.grid.get(r).get(c);
+    private void revealSquare(int r, int c, List<List<BoardSquare>> grid) {
+        BoardSquare square = grid.get(r).get(c);
         if (square.getValue().equals("_") || square.getStatus().equals(SquareCheckStatus.CheckedTrue)) {
             return;
         }
@@ -367,8 +364,8 @@ public class Board {
         square.setStatus(SquareCheckStatus.Revealed);
     }
 
-    private void clearSquare(int r, int c) {
-        BoardSquare square = this.grid.get(r).get(c);
+    private void clearSquare(int r, int c, List<List<BoardSquare>> grid) {
+        BoardSquare square = grid.get(r).get(c);
         if (square.getValue().equals("_")) {
             return;
         }
@@ -376,88 +373,79 @@ public class Board {
         square.setStatus(SquareCheckStatus.Unchecked);
     }
 
-    private void checkWord() {
-        int r = this.selection.getRowCoord();
-        int c = this.selection.getColCoord();
-        if (this.selection.getDirection().equals(ClueType.Across)) {
-            int wordInd = this.grid.get(r).get(c).getAcrossWordIndex();
+    private void checkWord(List<List<BoardSquare>> grid, SquareSelection selection) {
+        int r = selection.getRowCoord();
+        int c = selection.getColCoord();
+        if (selection.getDirection().equals(ClueType.Across)) {
+            int wordInd = grid.get(r).get(c).getAcrossWordIndex();
             int x = c - wordInd;
-            while (x < this.width && !this.grid.get(r).get(x).getValue().equals("_")) {
-                checkSquare(r, x);
+            while (x < this.width && !grid.get(r).get(x).getValue().equals("_")) {
+                checkSquare(r, x, grid);
                 x++;
             }
         } else {
-            int wordInd = this.grid.get(r).get(c).getDownWordIndex();
+            int wordInd = grid.get(r).get(c).getDownWordIndex();
             int y = r - wordInd;
-            while (y < this.height && !this.grid.get(y).get(c).getValue().equals("_")) {
-                checkSquare(y, c);
+            while (y < this.height && !grid.get(y).get(c).getValue().equals("_")) {
+                checkSquare(y, c, grid);
                 y++;
             }
         }
     }
 
-    private void revealWord() {
-        int r = this.selection.getRowCoord();
-        int c = this.selection.getColCoord();
-        if (this.selection.getDirection().equals(ClueType.Across)) {
-            int wordInd = this.grid.get(r).get(c).getAcrossWordIndex();
+    private void revealWord(List<List<BoardSquare>> grid, SquareSelection selection) {
+        int r = selection.getRowCoord();
+        int c = selection.getColCoord();
+        if (selection.getDirection().equals(ClueType.Across)) {
+            int wordInd = grid.get(r).get(c).getAcrossWordIndex();
             int x = c - wordInd;
-            while (x < this.width && !this.grid.get(r).get(x).getValue().equals("_")) {
-                revealSquare(r, x);
+            while (x < this.width && !grid.get(r).get(x).getValue().equals("_")) {
+                revealSquare(r, x, grid);
                 x++;
             }
         } else {
-            int wordInd = this.grid.get(r).get(c).getDownWordIndex();
+            int wordInd = grid.get(r).get(c).getDownWordIndex();
             int y = r - wordInd;
-            while (y < this.height && !this.grid.get(y).get(c).getValue().equals("_")) {
-                revealSquare(y, c);
+            while (y < this.height && !grid.get(y).get(c).getValue().equals("_")) {
+                revealSquare(y, c, grid);
                 y++;
             }
         }
     }
 
-    private void clearWord() {
-        int r = this.selection.getRowCoord();
-        int c = this.selection.getColCoord();
-        if (this.selection.getDirection().equals(ClueType.Across)) {
-            int wordInd = this.grid.get(r).get(c).getAcrossWordIndex();
+    private void clearWord(List<List<BoardSquare>> grid, SquareSelection selection) {
+        int r = selection.getRowCoord();
+        int c = selection.getColCoord();
+        if (selection.getDirection().equals(ClueType.Across)) {
+            int wordInd = grid.get(r).get(c).getAcrossWordIndex();
             int x = c - wordInd;
-            while (x < this.width && !this.grid.get(r).get(x).getValue().equals("_")) {
-                clearSquare(r, x);
+            while (x < this.width && !grid.get(r).get(x).getValue().equals("_")) {
+                clearSquare(r, x, grid);
                 x++;
             }
         } else {
-            int wordInd = this.grid.get(r).get(c).getDownWordIndex();
+            int wordInd = grid.get(r).get(c).getDownWordIndex();
             int y = r - wordInd;
-            while (y < this.height && !this.grid.get(y).get(c).getValue().equals("_")) {
-                clearSquare(y, c);
+            while (y < this.height && !grid.get(y).get(c).getValue().equals("_")) {
+                clearSquare(y, c, grid);
                 y++;
             }
         }
     }
 
-    private void checkPuzzle() {
+    private void checkPuzzle(List<List<BoardSquare>> grid) {
         for (int r = 0; r < this.height; r++) {
             for (int c = 0; c < this.width; c++) {
-                checkSquare(r, c);
+                checkSquare(r, c, grid);
             }
         }
     }
 
-    private void revealPuzzle() {
+    private void revealPuzzle(List<List<BoardSquare>> grid) {
         for (int r = 0; r < this.height; r++) {
             for (int c = 0; c < this.width; c++) {
-                revealSquare(r, c);
+                revealSquare(r, c, grid);
             }
         }
-    }
-
-    private void clearPuzzle() {
-        for (int r = 0; r < this.height; r++) {
-            for (int c = 0; c < this.width; c++) {
-                clearSquare(r,c);
-            }
-        }
-        resetSquareSelection();
     }
 }

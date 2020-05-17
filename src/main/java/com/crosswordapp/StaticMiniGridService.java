@@ -1,10 +1,9 @@
 package com.crosswordapp;
 
+import com.crosswordapp.bean.crossword.GridBean;
 import com.crosswordapp.bean.mini.MiniGridBean;
 import com.crosswordapp.bean.mini.MiniGridListBean;
 import com.crosswordapp.bean.mini.MiniGridShapeListBean;
-import com.crosswordapp.bean.mini.WordClueEntryListBean;
-import com.crosswordapp.object.Mini;
 import com.crosswordapp.object.MiniDifficulty;
 import com.crosswordapp.object.MiniGridTemplate;
 import org.slf4j.Logger;
@@ -60,43 +59,36 @@ public class StaticMiniGridService {
         return grids.get(ind);
     }
 
+    public static Map<Integer, List<MiniGridTemplate>> getMiniGridMap() {
+        return miniGridMap;
+    }
+
     private static void initializeMiniGridMap(MiniGridShapeListBean gridListsBean) {
         miniGridMap = new HashMap<>();
         for (MiniGridListBean sizeListBean: gridListsBean.getGridLists()) {
             Integer size = Integer.parseInt(sizeListBean.getSize());
             List<MiniGridTemplate> gridList = new ArrayList<>();
-            Map<Integer, List<MiniGridTemplate>> numBlackToGrids = new HashMap<>();
-            int maxSetSize = 0;
             for (MiniGridBean gridBean: sizeListBean.getGrids()) {
-                Integer numBlack = Integer.parseInt(gridBean.getBlack());
+                Integer numBlack = findNumBlackInGrid(gridBean);
                 MiniGridTemplate miniGrid = new MiniGridTemplate(size, numBlack, gridBean.getRows());
                 gridList.add(miniGrid);
-
-                Integer category = numBlack/2;
-                if (numBlackToGrids.containsKey(category)) {
-                    numBlackToGrids.get(category).add(miniGrid);
-                } else {
-                    numBlackToGrids.put(category, new ArrayList<>(Arrays.asList(miniGrid)));
-                }
-                if (numBlackToGrids.get(category).size() > maxSetSize)
-                    maxSetSize = numBlackToGrids.get(category).size();
-            }
-            // this normalizes the distribution of blacks in the grid chosen by duplicating ones that have
-            // an abnormal amount of black squares
-            for (Integer category: numBlackToGrids.keySet()) {
-                List<MiniGridTemplate> grids = numBlackToGrids.get(category);
-                int numGrids = grids.size();
-                while (numGrids <= maxSetSize - grids.size()) {
-                    for (MiniGridTemplate grid: grids) {
-                        gridList.add(grid);
-                        numGrids++;
-                    }
-                }
             }
             Collections.sort(gridList, new GridComparator());
             miniGridMap.put(size, gridList);
             logger.info("Read in " + gridList.size() + " mini grids of size " + size);
         }
+    }
+
+    private static int findNumBlackInGrid(MiniGridBean grid) {
+        int black = 0;
+        for (String row: grid.getRows()) {
+            for (char c: row.toCharArray()) {
+                if (c == '_') {
+                    black++;
+                }
+            }
+        }
+        return black;
     }
 
     private static MiniGridShapeListBean deserializeFromXml(String fileName) throws JAXBException {

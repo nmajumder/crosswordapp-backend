@@ -2,18 +2,16 @@ package com.crosswordapp.object;
 
 import com.crosswordapp.ClueManager;
 
-import java.util.UUID;
-
 public class Crossword {
-    private UUID id;
+    private String id;
     private String title;
     private String date;
     private Difficulty difficulty;
     private Board board;
     private ClueManager clueManager;
 
-    public Crossword(String title, String date, Difficulty difficulty, Board board, ClueManager clueManager) {
-        this.id = UUID.randomUUID();
+    public Crossword(String id, String title, String date, Difficulty difficulty, Board board, ClueManager clueManager) {
+        this.id = id;
         this.title = title;
         this.date = date;
         this.difficulty = difficulty;
@@ -21,17 +19,13 @@ public class Crossword {
         this.clueManager = clueManager;
     }
 
-    /* IMMUTABLE FIELDS */
-
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    /* MUTABLE FIELDS */
+    public void setId(String id) { this.id = id; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
 
     public void setTitle(String title) {
         this.title = title;

@@ -11,6 +11,9 @@ import java.io.Serializable;
 public class CrosswordBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @XmlElement(name = "id")
+    String id;
+
     @XmlElement(name = "title")
     String title;
 
@@ -31,6 +34,10 @@ public class CrosswordBean implements Serializable {
 
     @XmlElement(name = "downClues")
     ClueListBean downClues;
+
+    public String getId() { return id; }
+
+    public void setId(String id) { this.id = id; }
 
     public String getTitle() {
         return title;

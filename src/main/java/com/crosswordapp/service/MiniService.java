@@ -3,13 +3,18 @@ package com.crosswordapp.service;
 import com.crosswordapp.ClueManager;
 import com.crosswordapp.StaticMiniClueService;
 import com.crosswordapp.StaticMiniGridService;
+import com.crosswordapp.dao.StatsDAO;
+import com.crosswordapp.dao.UserDAO;
 import com.crosswordapp.generation.GenerationApp;
 import com.crosswordapp.generation.Grid;
 import com.crosswordapp.object.*;
+import com.crosswordapp.rep.MiniCompletedRep;
 import com.crosswordapp.rep.MiniRep;
+import com.crosswordapp.rep.MiniStatsRep;
 import org.javatuples.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +24,12 @@ import java.util.List;
 public class MiniService {
     static Logger logger = LoggerFactory.getLogger(MiniService.class);
 
+    @Autowired
+    private UserDAO userDAO;
+
+    @Autowired
+    private StatsDAO statsDAO;
+
     public MiniService() {}
 
     public MiniRep generateMini(Integer size, MiniDifficulty difficulty) {
@@ -27,6 +38,11 @@ public class MiniService {
             return null;
         }
         Grid grid = GenerationApp.generateBoard(gridTemplate.getGrid());
+        if (grid == null) {
+            logger.error("Unable to generate a board within the time limit, must try again");
+            return null;
+        }
+
         List<String> gridRows = new ArrayList<>();
         for (int r = 0; r < grid.height; r++) {
             StringBuilder sb = new StringBuilder();
@@ -135,5 +151,42 @@ public class MiniService {
 
         int rand = (int) Math.floor(Math.random() * choices.size());
         return choices.get(rand);
+    }
+
+    public void recordMiniStarted(String userToken, Integer size, MiniDifficulty difficulty) {
+        if (userDAO.validateToken(userToken) != null) {
+            if (statsDAO.getStats(userToken) == null) {
+                statsDAO.createStats(userToken);
+            }
+            statsDAO.updateMiniStarted(userToken, size, difficulty);
+            logger.debug("User " + userToken + " began a mini puzzle");
+        } else {
+            logger.error("Unable to log start of mini puzzle, user does not exist: " + userToken);
+        }
+    }
+
+    public MiniStatsRep recordMiniStats(String userToken, MiniCompletedRep mini) {
+        if (userDAO.validateToken(userToken) != null) {
+            if (statsDAO.getStats(userToken) == null) {
+                statsDAO.createStats(userToken);
+            }
+            statsDAO.updateMiniCompleted(userToken, mini);
+            return statsDAO.getStats(userToken);
+        } else {
+            logger.error("Cannot update stats, this user does not exist: " + userToken);
+            return null;
+        }
+    }
+
+    public MiniStatsRep getMiniStats(String userToken) {
+        if (userDAO.validateToken(userToken) != null) {
+            if (statsDAO.getStats(userToken) == null) {
+                statsDAO.createStats(userToken);
+            }
+            return statsDAO.getStats(userToken);
+        } else {
+            logger.error("Cannot get stats, this user does not exist: " + userToken);
+            return null;
+        }
     }
 }

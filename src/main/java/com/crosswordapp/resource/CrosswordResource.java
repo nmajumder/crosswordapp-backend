@@ -1,6 +1,6 @@
 package com.crosswordapp.resource;
 
-import com.crosswordapp.exception.BoardUpdateException;
+import com.crosswordapp.exception.BoardException;
 import com.crosswordapp.object.CheckType;
 import com.crosswordapp.rep.BoardRep;
 import com.crosswordapp.rep.CrosswordRep;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
@@ -22,14 +21,9 @@ public class CrosswordResource {
     @Autowired
     private CrosswordService crosswordService;
 
-    @GetMapping(PATH + "/all")
-    public List<CrosswordRep> getAllCrosswords() {
-        return crosswordService.findAll();
-    }
-
-    @GetMapping(PATH + "/{id}/{userid}")
-    public CrosswordRep getCrossword(@PathVariable String id, @PathVariable String userid) {
-        return crosswordService.findById(UUID.fromString(id));
+    @GetMapping(PATH + "/{userid}/all")
+    public List<CrosswordRep> getAllCrosswords(@PathVariable String userid) {
+        return crosswordService.findAll(userid);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/update")
@@ -37,9 +31,9 @@ public class CrosswordResource {
                                  @PathVariable String id, @PathVariable String userid) {
         logger.info("Saving board for crossword {} and user {}", id, userid);
         try {
-            crosswordService.updateById(UUID.fromString(id), board);
-        } catch (BoardUpdateException e) {
-            String error = String.format("Unable to update board with id %s: %s", id, e.getMessage());
+            crosswordService.updateById(id, userid, board);
+        } catch (BoardException e) {
+            String error = String.format("Unable to update board with id %s for user %s: %s", id, userid, e.getMessage());
             logger.error(error);
         }
     }
@@ -47,71 +41,63 @@ public class CrosswordResource {
     @PutMapping(PATH + "/{id}/{userid}/isComplete")
     public BoardRep crosswordIsComplete(@RequestBody BoardRep board,
                                        @PathVariable String id, @PathVariable String userid) {
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.crosswordIsComplete(UUID.fromString(id));
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.crosswordIsComplete(id, userid);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/check/square")
     public BoardRep checkSquare(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Checking square for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.checkCrossword(UUID.fromString(id), CheckType.Square);
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.checkCrossword(id, userid, CheckType.Square);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/check/word")
     public BoardRep checkWord(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Checking word for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.checkCrossword(UUID.fromString(id), CheckType.Word);
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.checkCrossword(id, userid, CheckType.Word);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/check/puzzle")
     public BoardRep checkPuzzle(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Checking puzzle for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.checkCrossword(UUID.fromString(id), CheckType.Puzzle);
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.checkCrossword(id, userid, CheckType.Puzzle);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/reveal/square")
     public BoardRep revealSquare(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Revealing square for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.revealCrossword(UUID.fromString(id), CheckType.Square);
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.revealCrossword(id, userid, CheckType.Square);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/reveal/word")
     public BoardRep revealWord(@RequestBody BoardRep board,
                               @PathVariable String id, @PathVariable String userid) {
         logger.info("Revealing word for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.revealCrossword(UUID.fromString(id), CheckType.Word);
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.revealCrossword(id, userid, CheckType.Word);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/reveal/puzzle")
     public BoardRep revealPuzzle(@RequestBody BoardRep board,
                                 @PathVariable String id, @PathVariable String userid) {
         logger.info("Revealing puzzle for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.revealCrossword(UUID.fromString(id), CheckType.Puzzle);
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.revealCrossword(id, userid, CheckType.Puzzle);
     }
 
-    @PutMapping(PATH + "/{id}/{userid}/clear/word")
-    public BoardRep clearWord(@RequestBody BoardRep board,
-                               @PathVariable String id, @PathVariable String userid) {
-        logger.info("Clearing word for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.clearCrossword(UUID.fromString(id), CheckType.Word);
-    }
-
-    @PutMapping(PATH + "/{id}/{userid}/clear/puzzle")
-    public BoardRep clearPuzzle(@RequestBody BoardRep board,
+    @PutMapping(PATH + "/{id}/{userid}/reset")
+    public BoardRep resetPuzzle(@RequestBody BoardRep board,
                                  @PathVariable String id, @PathVariable String userid) {
         logger.info("Clearing puzzle for crossword {} and user {}", id, userid);
-        crosswordService.updateById(UUID.fromString(id), board);
-        return crosswordService.clearCrossword(UUID.fromString(id), CheckType.Puzzle);
+        crosswordService.updateById(id, userid, board);
+        return crosswordService.resetCrossword(id, userid);
     }
 }

@@ -14,6 +14,7 @@ public class Lexicon {
     private static List<String> wordList;
     private static List<List<Integer>> fullLetterLists;
     private static List<List<List<List<Integer>>>> indexLists;
+    private static HashMap<Integer, SortedSet<Integer>> subsetMap;
 
     public Lexicon() {
         indexLists = new ArrayList<>();
@@ -30,6 +31,7 @@ public class Lexicon {
         }
 
         initWordList();
+        initSubsetMap();
         logger.info("Read in " + wordList.size() + " words from file");
     }
 
@@ -50,6 +52,24 @@ public class Lexicon {
         }
     }
 
+    // initializes a map from each word to any words that it cannot be placed with
+    // i.e. if one is a subset of the other
+    private static void initSubsetMap() {
+        subsetMap = new HashMap<>();
+        for (int i = 0; i < wordList.size()-1; i++) {
+            subsetMap.put(i, new TreeSet<>());
+            for (int j = i+1; j < wordList.size(); j++) {
+                if (wordList.get(i).contains(wordList.get(j)) ||
+                    wordList.get(j).contains(wordList.get(i))) {
+                    subsetMap.get(i).add(j);
+                    if (!subsetMap.containsKey(j))
+                        subsetMap.put(j, new TreeSet<>());
+                    subsetMap.get(j).add(i);
+                }
+            }
+        }
+    }
+
     public List<Integer> findMatches(String pattern, List<Integer> choices) {
         List<Integer> matches = new ArrayList<>();
         boolean started = false;
@@ -59,7 +79,10 @@ public class Lexicon {
                 if (!started) {
                     List<Integer> rawMatches = indexLists.get(patternLen).get(letter).get(pattern.charAt(letter)-'A');
                     for (int i = 0; i < rawMatches.size(); i++) {
-                        matches.add(rawMatches.get(i));
+                        // add this as a match if none of its subset map entries are already chosen
+                        if (intersection(choices, new ArrayList<>(subsetMap.get(i))).isEmpty()) {
+                            matches.add(rawMatches.get(i));
+                        }
                     }
                     started = true;
                 } else {
@@ -72,9 +95,7 @@ public class Lexicon {
             List<Integer> rawMatches = fullLetterLists.get(patternLen);
             matches.addAll(rawMatches);
         }
-        List<Integer> sortedChoices = new ArrayList<>(choices);
-        sortedChoices.sort(Comparator.naturalOrder());
-        List<Integer> result = difference(matches, sortedChoices);
+        List<Integer> result = difference(matches, choices);
         return result;
     }
 

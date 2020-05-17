@@ -66,6 +66,7 @@ public class StaticMiniClueService {
                     continue;
                 }
                 if (shouldKeepClue(clue.getText())) {
+                    clue.setText(cleanUpClue(clue.getText()));
                     clueList.add(new MiniClue(day, clue.getText()));
                 } else {
                     //logger.warn("For word: " + word + ", throwing away clue: " + clue.getText());
@@ -86,8 +87,37 @@ public class StaticMiniClueService {
         if (clueText.toLowerCase().contains("this puzzle")) return false;
         if (clueText.toLowerCase().contains("theme") && clueText.toLowerCase().contains("puzzle")) return false;
         if (clueText.contains("&lt;-")) return false;
+        if (clueText.contains("*")) return false;
 
         return true;
+    }
+
+    private static String cleanUpClue(String clueText) {
+        if (!clueText.contains("_")) return clueText;
+
+        int firstUnderscore = clueText.indexOf("_");
+        if (firstUnderscore != 0) {
+            char prevChar = clueText.charAt(firstUnderscore - 1);
+            if (Character.isLetter(prevChar) || Character.isDigit(prevChar)) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(clueText, 0, firstUnderscore);
+                sb.append(" ");
+                sb.append(clueText, firstUnderscore, clueText.length());
+                clueText = sb.toString();
+            }
+        }
+        int lastUnderscore = clueText.lastIndexOf("_");
+        if (lastUnderscore != clueText.length()-1) {
+            char nextChar = clueText.charAt(lastUnderscore + 1);
+            if (Character.isLetter(nextChar) || Character.isDigit(nextChar)) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(clueText, 0, lastUnderscore+1);
+                sb.append(" ");
+                sb.append(clueText, lastUnderscore+1, clueText.length());
+                clueText = sb.toString();
+            }
+        }
+        return clueText;
     }
 
     private static WordClueEntryListBean deserializeFromXml(String fileName) throws JAXBException {

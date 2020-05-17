@@ -2,8 +2,6 @@ package com.crosswordapp.rep;
 
 import com.crosswordapp.object.User;
 
-import java.util.UUID;
-
 public class UserResponseRep {
     public User user;
     public Boolean success;

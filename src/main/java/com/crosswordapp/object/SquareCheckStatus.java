@@ -1,5 +1,5 @@
 package com.crosswordapp.object;
 
 public enum SquareCheckStatus {
-    Unchecked, CheckedTrue, CheckedFalse, Revealed, Complete
+    Unchecked, PrevChecked, CheckedTrue, CheckedFalse, Revealed, Complete
 }

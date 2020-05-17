@@ -19,22 +19,18 @@ import java.util.*;
 public class StaticCrosswordService {
     static Logger logger = LoggerFactory.getLogger(StaticCrosswordService.class);
 
-    static Map<UUID, Crossword> crosswordMap;
+    static Map<String, Crossword> crosswordMap;
 
     static {
         crosswordMap = new HashMap<>();
     }
 
-    public static Map<UUID, Crossword> getCrosswordMap() {
+    public static Map<String, Crossword> getCrosswordMap() {
         return crosswordMap;
     }
 
-    public static Crossword getCrossword(UUID id) {
+    public static Crossword getCrossword(String id) {
         return crosswordMap.containsKey(id) ? crosswordMap.get(id) : null;
-    }
-
-    public static void createOrUpdateCrossword(Crossword crossword) {
-        crosswordMap.put(crossword.getId(), crossword);
     }
 
     public static void initializeCrosswords() {
@@ -69,7 +65,7 @@ public class StaticCrosswordService {
             }
             logger.info("Found {} across clues and {} down clues", acrossClues.size(), downClues.size());
             ClueManager clueManager = new ClueManager(acrossClues, downClues);
-            Crossword crossword = new Crossword(crb.getTitle(), crb.getDate(), crb.getDifficulty(), board, clueManager);
+            Crossword crossword = new Crossword(crb.getId(), crb.getTitle(), crb.getDate(), crb.getDifficulty(), board, clueManager);
             crosswordMap.put(crossword.getId(), crossword);
         }
     }

@@ -5,6 +5,9 @@ import com.crosswordapp.object.User;
 import com.crosswordapp.rep.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,11 +16,11 @@ import java.util.*;
 public class UserService {
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
+    @Autowired
     private UserDAO userDAO;
 
-    public UserService() {
-        userDAO = new UserDAO();
-    }
+    @Autowired
+    private JavaMailSender emailSender;
 
     public UserResponseRep createUser(UserCreateRep userRep) {
         if (userDAO.userExists(userRep.email)) {
@@ -53,6 +56,20 @@ public class UserService {
         }
     }
 
+    public UserResponseRep changePassword(UserPasswordRep userRep) {
+        if (userDAO.validatePassword(userRep.email, userRep.password) == null) {
+            logger.error("Password incorrect for email: " + userRep.email);
+            return new UserResponseRep(false, "password error");
+        }
+        User user = userDAO.changePassword(userRep.email, userRep.newPassword);
+        if (user == null) {
+            logger.error("Unexpected error updating password for email: " + userRep.email);
+            return new UserResponseRep(false, "password error");
+        } else {
+            return new UserResponseRep(true, user);
+        }
+    }
+
     public UserResponseRep linkUser(UserLinkRep userRep) {
         if (userDAO.userExists(userRep.newAccount.email)) {
             logger.error("New account email for link is already associated with an account: " + userRep.newAccount.email);
@@ -77,6 +94,27 @@ public class UserService {
         } else {
             return new UserResponseRep(true, user);
         }
+    }
+
+    public UserResponseRep resetPassword(String email) {
+        if (!userDAO.userExists(email)) {
+            logger.error("Cannot reset password, email is not recognized in database: " + email);
+            return new UserResponseRep(false, "Email not recognized");
+        } else {
+            String tempPassword = userDAO.resetPassword(email);
+            sendPasswordMessage(email, tempPassword);
+            return new UserResponseRep(true, "");
+        }
+    }
+
+    private void sendPasswordMessage(String targetEmail, String tempPassword) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(targetEmail);
+        message.setSubject("Password reset for crossword app");
+        String body = "Please login using the following code as your password, " +
+                "and then go through the normal password change process: " + tempPassword;
+        message.setText(body);
+        emailSender.send(message);
     }
 
 }

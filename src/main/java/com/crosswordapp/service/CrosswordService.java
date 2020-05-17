@@ -1,6 +1,7 @@
 package com.crosswordapp.service;
 
-import com.crosswordapp.exception.BoardUpdateException;
+import com.crosswordapp.dao.BoardDAO;
+import com.crosswordapp.exception.BoardException;
 import com.crosswordapp.object.CheckType;
 import com.crosswordapp.object.Crossword;
 import com.crosswordapp.StaticCrosswordService;
@@ -8,69 +9,79 @@ import com.crosswordapp.rep.BoardRep;
 import com.crosswordapp.rep.CrosswordRep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CrosswordService {
     static Logger logger = LoggerFactory.getLogger(CrosswordService.class);
 
-    public CrosswordService() { }
+    @Autowired
+    private BoardDAO boardDAO;
 
-    public List<CrosswordRep> findAll() {
+    public List<CrosswordRep> findAll(String userid) {
         List<CrosswordRep> reps = new ArrayList<>();
         for (Crossword c: StaticCrosswordService.getCrosswordMap().values()) {
-            reps.add(new CrosswordRep(c));
+            BoardRep boardRep = boardDAO.getBoard(userid, c.getId());
+            if (boardRep == null) {
+                boardRep = new BoardRep(c.getBoard(), false);
+                boardDAO.createBoard(userid, c.getId(), boardRep);
+            }
+            CrosswordRep crosswordRep = new CrosswordRep(c);
+            crosswordRep.board = boardRep;
+            reps.add(crosswordRep);
         }
         return reps;
     }
 
-    public CrosswordRep findById(UUID id) {
+    public void updateById(String id, String userid, BoardRep board) throws BoardException {
         Crossword c = StaticCrosswordService.getCrossword(id);
         if (c == null) {
-            logger.error("Unable to find crossword with id " + id.toString());
-            return null;
+            throw new BoardException("Crossword with id {} does not exist", id);
         }
-        return new CrosswordRep(c);
+        boardDAO.updateBoard(userid, id, board);
     }
 
-    public void updateById(UUID id, BoardRep board) throws BoardUpdateException {
-        Crossword c = StaticCrosswordService.getCrossword(id);
-        if (c == null) {
-            throw new BoardUpdateException("Crossword with id {} does not exist", id.toString());
+    public BoardRep crosswordIsComplete(String id, String userid) {
+        BoardRep boardRep = boardDAO.getBoard(userid, id);
+        if (boardRep == null) {
+            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
         }
-        c.getBoard().setSelection(board.selection);
-        c.getBoard().setNumSeconds(board.numSeconds);
-        boolean success = c.getBoard().setGrid(board.grid);
-        if (!success) {
-            throw new BoardUpdateException("Updated board is invalid for crossword with id {}", id.toString());
+        Crossword c = StaticCrosswordService.getCrossword(id);
+        c.getBoard().gridIsSolved(boardRep.grid);
+        return boardRep;
+    }
+
+    public BoardRep checkCrossword(String id, String userid, CheckType type) {
+        BoardRep boardRep = boardDAO.getBoard(userid, id);
+        if (boardRep == null) {
+            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
         }
+        Crossword c = StaticCrosswordService.getCrossword(id);
+        c.getBoard().check(type, boardRep.grid, boardRep.selection);
+        return boardRep;
     }
 
-    public BoardRep crosswordIsComplete(UUID id) {
+    public BoardRep revealCrossword(String id, String userid, CheckType type) {
+        BoardRep boardRep = boardDAO.getBoard(userid, id);
+        if (boardRep == null) {
+            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
+        }
         Crossword c = StaticCrosswordService.getCrossword(id);
-        c.getBoard().gridIsSolved();
-        return new BoardRep(c.getBoard(), false);
+        c.getBoard().reveal(type, boardRep.grid, boardRep.selection);
+        return boardRep;
     }
 
-    public BoardRep checkCrossword(UUID id, CheckType type) {
+    public BoardRep resetCrossword(String id, String userid) {
+        BoardRep boardRep = boardDAO.getBoard(userid, id);
+        if (boardRep == null) {
+            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
+        }
         Crossword c = StaticCrosswordService.getCrossword(id);
-        c.getBoard().check(type);
-        return new BoardRep(c.getBoard(), false);
-    }
-
-    public BoardRep revealCrossword(UUID id, CheckType type) {
-        Crossword c = StaticCrosswordService.getCrossword(id);
-        c.getBoard().reveal(type);
-        return new BoardRep(c.getBoard(), false);
-    }
-
-    public BoardRep clearCrossword(UUID id, CheckType type) {
-        Crossword c = StaticCrosswordService.getCrossword(id);
-        c.getBoard().clear(type);
-        return new BoardRep(c.getBoard(), false);
+        c.getBoard().reset(boardRep.grid, boardRep.selection);
+        return boardRep;
     }
 }

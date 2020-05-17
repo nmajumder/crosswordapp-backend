@@ -1,6 +1,113 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <crosswordList>
     <crossword>
+        <id>18</id>
+        <title>Test</title>
+        <date>2019-10-01</date>
+        <grid>
+            <row>SSSS_SSSS__SSSS</row>
+            <row>SSSS_SSSS_SSSSS</row>
+            <row>SSSSSSSSS_SSSSS</row>
+            <row>SSSS?S_SSSS_SSS</row>
+            <row>___SSSS_SSSSS__</row>
+            <row>SSSSS_SSSSSSSS_</row>
+            <row>SSSS_SSS_SSSSSS</row>
+            <row>SSS_SSSSSSS_SSS</row>
+            <row>SSSSSS_SSS_SSSS</row>
+            <row>_SSSSSSSS_SSSSS</row>
+            <row>__SSSSS_SSSS___</row>
+            <row>SSS_SSSS_SSSSSS</row>
+            <row>SSSSS_SSSSSSSSS</row>
+            <row>SSSSS_SSSS_SSSS</row>
+            <row>SSSS__SSSS_SSSS</row>
+        </grid>
+        <symmetry>DIAGONAL</symmetry>
+        <difficulty>DIFFICULT</difficulty>
+        <acrossClues>
+            <clue><num>1</num><text>Work alongside a cashier</text></clue>
+            <clue><num>5</num><text>Last-minute costume</text></clue>
+            <clue><num>9</num><text>Palindromic male name</text></clue>
+            <clue><num>13</num><text>Archipelago unit: Abbr.</text></clue>
+            <clue><num>14</num><text>Like a ballerina's body</text></clue>
+            <clue><num>15</num><text>* "My bad"</text></clue>
+            <clue><num>16</num><text>* Bit of practice for a resident</text></clue>
+            <clue><num>18</num><text>Those eligible to be drafted, historically</text></clue>
+            <clue><num>19</num><text>Catch wind (of)</text></clue>
+            <clue><num>20</num><text>Take second, say</text></clue>
+            <clue><num>22</num><text>"Good Will Hunting" sch.</text></clue>
+            <clue><num>23</num><text>Braved some rapids, perhaps</text></clue>
+            <clue><num>25</num><text>* Hot water</text></clue>
+            <clue><num>27</num><text>* Fingerprint, maybe</text></clue>
+            <clue><num>30</num><text>Rib comedically</text></clue>
+            <clue><num>33</num><text>Red or National, e.g.</text></clue>
+            <clue><num>34</num><text>Delta hub</text></clue>
+            <clue><num>35</num><text>Bodily reflex in a haunted house, maybe</text></clue>
+            <clue><num>37</num><text>Place to drop a line</text></clue>
+            <clue><num>38</num><text>Event where the starred answers might be found</text></clue>
+            <clue><num>38</num><text>Inferiors of sgts. with 23-Across and 25-Across</text></clue>
+            <clue><num>40</num><text>Makes a misstep</text></clue>
+            <clue><num>41</num><text>Apt name for a lawyer</text></clue>
+            <clue><num>43</num><text>Store window sign</text></clue>
+            <clue><num>44</num><text>City destroyed by Godzilla</text></clue>
+            <clue><num>45</num><text>* Insurance agent's calculation</text></clue>
+            <clue><num>47</num><text>* Head case?</text></clue>
+            <clue><num>48</num><text>One of a popular disco trio</text></clue>
+            <clue><num>49</num><text>Exit key</text></clue>
+            <clue><num>51</num><text>Like cliches</text></clue>
+            <clue><num>53</num><text>Something exchanged, or heard, at a wedding</text></clue>
+            <clue><num>55</num><text>Essentials</text></clue>
+            <clue><num>59</num><text>* Secretary of State's skill</text></clue>
+            <clue><num>61</num><text>* Forbidden</text></clue>
+            <clue><num>63</num><text>Collect slowly, as information</text></clue>
+            <clue><num>64</num><text>Young fella</text></clue>
+            <clue><num>65</num><text>Tuck away</text></clue>
+            <clue><num>66</num><text>Mournful poem</text></clue>
+            <clue><num>67</num><text>Big shots on campus: Abbr.</text></clue>
+        </acrossClues>
+        <downClues>
+            <clue><num>1</num><text>Social media profile bit, briefly</text></clue>
+            <clue><num>2</num><text>Driveway choice</text></clue>
+            <clue><num>3</num><text>Overjoyed</text></clue>
+            <clue><num>4</num><text>Reason for eye black</text></clue>
+            <clue><num>5</num><text>Billboard topper</text></clue>
+            <clue><num>6</num><text>Redding of soul</text></clue>
+            <clue><num>7</num><text>Something on the court or the bar</text></clue>
+            <clue><num>8</num><text>Convictions</text></clue>
+            <clue><num>9</num><text>Ball or cart suffix</text></clue>
+            <clue><num>10</num><text>Quiver</text></clue>
+            <clue><num>11</num><text>Movie precurser</text></clue>
+            <clue><num>12</num><text>Kind of bar</text></clue>
+            <clue><num>15</num><text>Kind of bar</text></clue>
+            <clue><num>17</num><text>Climbing documentary "Free ___"</text></clue>
+            <clue><num>21</num><text>Give stars to</text></clue>
+            <clue><num>24</num><text>Works in a gallery</text></clue>
+            <clue><num>26</num><text>Early maker of color TVs</text></clue>
+            <clue><num>27</num><text>Tap, as one's fingers</text></clue>
+            <clue><num>28</num><text>One word in ICU</text></clue>
+            <clue><num>29</num><text>Cry in a futbol stadium</text></clue>
+            <clue><num>31</num><text>It might keep you up at night</text></clue>
+            <clue><num>32</num><text>Heating option</text></clue>
+            <clue><num>34</num><text>Chem. class measures</text></clue>
+            <clue><num>36</num><text>Secluded valley</text></clue>
+            <clue><num>38</num><text>Tick off</text></clue>
+            <clue><num>39</num><text>Seize</text></clue>
+            <clue><num>42</num><text>Stereotypical safety item in a minivan</text></clue>
+            <clue><num>44</num><text>Group in many a study</text></clue>
+            <clue><num>46</num><text>___ Lady (Mary)</text></clue>
+            <clue><num>47</num><text>Tiny bit</text></clue>
+            <clue><num>50</num><text>Dunder Mifflin unit</text></clue>
+            <clue><num>51</num><text>"Wishing won't make ___"</text></clue>
+            <clue><num>52</num><text>Dark wood</text></clue>
+            <clue><num>54</num><text>Cultivate</text></clue>
+            <clue><num>56</num><text>Olympics stabber</text></clue>
+            <clue><num>57</num><text>Market index, with "the"</text></clue>
+            <clue><num>58</num><text>Gamer's annoyance</text></clue>
+            <clue><num>60</num><text>N.F.L. player's accumulation</text></clue>
+            <clue><num>62</num><text>N.F.L. player's accumulation</text></clue>
+        </downClues>
+    </crossword>
+    <crossword>
+        <id>17</id>
         <title>It's All Relative</title>
         <date>2019-10-01</date>
         <grid>
@@ -192,6 +299,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>16</id>
         <title>It's Your Turn</title>
         <date>2019-07-01</date>
         <grid>
@@ -299,6 +407,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>15</id>
         <title>Keep It Colloquial</title>
         <date>2019-06-01</date>
         <grid>
@@ -402,6 +511,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>14</id>
         <title>Off the Big Screen</title>
         <date>2018-10-15</date>
         <grid>
@@ -589,105 +699,109 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>13</id>
         <title>Get Well Soon</title>
         <date>2018-10-01</date>
         <grid>
-            <row>EASEIN___ARABIA</row>
-            <row>SUNDRY__SUAVEST</row>
-            <row>STOGIE_TODIEFOR</row>
-            <row>_OWEN_SHORN_ANA</row>
-            <row>EBB_ACLU_ADMITS</row>
-            <row>TAIL_AUNT_EURO_</row>
-            <row>THRIFT_DOLLS___</row>
+            <row>ODESSA__CAROMED</row>
+            <row>ROXANNE_SCOURGE</row>
+            <row>USSCONSTITUTION</row>
+            <row>___SWATH_SNL___</row>
+            <row>ABS_BLEUS_DEFAT</row>
+            <row>BRUNO_ENTS_TORE</row>
+            <row>DINEAT_DEER_GMA</row>
             <row>UNDERTHEWEATHER</row>
-            <row>___FOYER_DYNAMO</row>
-            <row>_ANOS_SCAG_TIOS</row>
-            <row>ALERTS_LIEU_LTE</row>
-            <row>ILA_BABAR_SEMI_</row>
-            <row>TURNITUP_ATTACK</row>
-            <row>CREATED__HEAROF</row>
-            <row>HEDGED___INSYNC</row>
+            <row>CGI_DOER_NIKONS</row>
+            <row>TIAS_PACT_NORIA</row>
+            <row>STLOU_PLEAD_NAT</row>
+            <row>___LBS_APNEA___</row>
+            <row>STEVENSPIELBERG</row>
+            <row>ORDERIN_DRAINER</row>
+            <row>NEEDSTO__AYEAYE</row>
         </grid>
         <symmetry>DIAGONAL</symmetry>
-        <difficulty>DIFFICULT</difficulty>
+        <difficulty>MODERATE</difficulty>
         <acrossClues>
-            <clue><num>1</num><text>Gently enter</text></clue>
-            <clue><num>7</num><text>Largest peninsula in the world</text></clue>
-            <clue><num>13</num><text>Miscellaneous</text></clue>
-            <clue><num>14</num><text>Most smooth</text></clue>
-            <clue><num>15</num><text>Cheap smoke</text></clue>
-            <clue><num>16</num><text>Absolutely incredible</text></clue>
-            <clue><num>17</num><text>Ben's "Zoolander" co-star</text></clue>
-            <clue><num>18</num><text>Bare, as some livestock</text></clue>
-            <clue><num>19</num><text>Former women's tennis champ Ivanovic</text></clue>
-            <clue><num>20</num><text>Tidal retreat</text></clue>
-            <clue><num>21</num><text>Grp. that sued the Trump administration one week into his presidency</text></clue>
-            <clue><num>23</num><text>Lets in ... or lets out</text></clue>
-            <clue><num>25</num><text>Shadow</text></clue>
-            <clue><num>27</num><text>Princess Anne, to Prince Harry</text></clue>
-            <clue><num>29</num><text>Capital established in 1999</text></clue>
-            <clue><num>30</num><text>Frugality</text></clue>
-            <clue><num>32</num><text>"Guys and ___"</text></clue>
-            <clue><num>34</num><text>What the second word of each of the starred answers is</text></clue>
-            <clue><num>39</num><text>Entrance hall</text></clue>
-            <clue><num>40</num><text>Energetic sort</text></clue>
-            <clue><num>41</num><text>Dozens of meses</text></clue>
-            <clue><num>43</num><text>Heroin, on the street</text></clue>
-            <clue><num>45</num><text>Some men in a familia</text></clue>
-            <clue><num>46</num><text>Signals of danger, e.g.</text></clue>
-            <clue><num>48</num><text>Instead, with "in"</text></clue>
-            <clue><num>50</num><text>Letters on a smartphone screen, perhaps</text></clue>
-            <clue><num>51</num><text>Dockworkers' labor union: Abbr.</text></clue>
-            <clue><num>52</num><text>Beloved picture book elephant</text></clue>
-            <clue><num>54</num><text>Final precursor</text></clue>
-            <clue><num>56</num><text>Request when a good song comes on, maybe</text></clue>
-            <clue><num>58</num><text>"Charge!"</text></clue>
-            <clue><num>60</num><text>Brought into being</text></clue>
-            <clue><num>61</num><text>Learn about</text></clue>
-            <clue><num>62</num><text>Like some bets</text></clue>
-            <clue><num>63</num><text>As one</text></clue>
+            <clue><num>1</num><text>Pearl of the Black Sea</text></clue>
+            <clue><num>7</num><text>Richoted</text></clue>
+            <clue><num>14</num><text>1979 Police hit</text></clue>
+            <clue><num>16</num><text>Plague</text></clue>
+            <clue><num>17</num><text>War of 1812 hero now residing in Boston</text></clue>
+            <clue><num>19</num><text>Mowed path</text></clue>
+            <clue><num>20</num><text>Longtime NBC staple</text></clue>
+            <clue><num>21</num><text>Crunch-time goals?</text></clue>
+            <clue><num>24</num><text>Some spotted cheeses</text></clue>
+            <clue><num>26</num><text>Trim, as some cuts</text></clue>
+            <clue><num>30</num><text>Mars preceder</text></clue>
+            <clue><num>32</num><text>Middle-earth creatures</text></clue>
+            <clue><num>34</num><text>Rushed</text></clue>
+            <clue><num>35</num><text>Patronize, in a way</text></clue>
+            <clue><num>37</num><text>Does, e.g.</text></clue>
+            <clue><num>39</num><text>A.M. show since 1975</text></clue>
+            <clue><num>40</num><text>Laid up ... or where the second word of every starred answer is, literally</text></clue>
+            <clue><num>43</num><text>Modern action film tech.</text></clue>
+            <clue><num>44</num><text>Not an idler</text></clue>
+            <clue><num>45</num><text>Canon alternatives</text></clue>
+            <clue><num>46</num><text>Mom’s siblings, in Seville</text></clue>
+            <clue><num>48</num><text>Entente</text></clue>
+            <clue><num>50</num><text>Waterwheel</text></clue>
+            <clue><num>51</num><text>Gateway Arch city, familiarly</text></clue>
+            <clue><num>53</num><text>What a defendant must do</text></clue>
+            <clue><num>55</num><text>Member of an NL East team</text></clue>
+            <clue><num>56</num><text>Things to minimize or maximize in the gym: Abbr.</text></clue>
+            <clue><num>58</num><text>Possible cause of a bad night’s sleep</text></clue>
+            <clue><num>60</num><text>Partner of Katzenberg and Geffen</text></clue>
+            <clue><num>67</num><text>Dinner decision after a long day</text></clue>
+            <clue><num>68</num><text>Place for a clean dish</text></clue>
+            <clue><num>69</num><text>Must</text></clue>
+            <clue><num>70</num><text>Affirmative from a crew member</text></clue>
         </acrossClues>
         <downClues>
-            <clue><num>1</num><text>Slalomer's path</text></clue>
-            <clue><num>2</num><text>M&#252;nchen motorway</text></clue>
-            <clue><num>3</num><text>* Certain Utah resort</text></clue>
-            <clue><num>4</num><text>Beat barely</text></clue>
-            <clue><num>5</num><text>Supermodel Shayk</text></clue>
-            <clue><num>6</num><text>Best selling author Bill of "Undeniable: Evolution and the Science of Creation"</text></clue>
-            <clue><num>7</num><text>McDonald with the most career Tony Awards as an actor</text></clue>
-            <clue><num>8</num><text>* Reason for a late start to a game</text></clue>
-            <clue><num>9</num><text>N.Y.C. street crosser</text></clue>
-            <clue><num>10</num><text>"Don't take sides"</text></clue>
-            <clue><num>11</num><text>Suspects</text></clue>
-            <clue><num>12</num><text>Back, in Bilbao</text></clue>
-            <clue><num>14</num><text>Locks separating Lake Superior and the lower Great Lakes</text></clue>
-            <clue><num>16</num><text>* Sudden celestial crash</text></clue>
-            <clue><num>18</num><text>Oldest coll. west of the Mississippi</text></clue>
-            <clue><num>20</num><text>Oft-quoted Shakespeare line</text></clue>
-            <clue><num>22</num><text>Malicious, as with one's comments</text></clue>
-            <clue><num>24</num><text>Definitely shouldn't</text></clue>
-            <clue><num>26</num><text>Protect, as when talking to the police</text></clue>
-            <clue><num>28</num><text>Need for one stuck in a rut, maybe</text></clue>
-            <clue><num>31</num><text>* Winter danger</text></clue>
-            <clue><num>33</num><text>Cliff brink</text></clue>
-            <clue><num>35</num><text>Stag party attendees</text></clue>
-            <clue><num>36</num><text>* Last ditch effort</text></clue>
-            <clue><num>37</num><text>Facial representation</text></clue>
-            <clue><num>38</num><text>Romantic offering</text></clue>
-            <clue><num>41</num><text>Enticing quality</text></clue>
-            <clue><num>42</num><text>Approached</text></clue>
-            <clue><num>44</num><text>Put on television</text></clue>
-            <clue><num>46</num><text>Head start?</text></clue>
-            <clue><num>47</num><text>Full</text></clue>
-            <clue><num>49</num><text>Northern east-west rte.</text></clue>
-            <clue><num>53</num><text>Future flower</text></clue>
-            <clue><num>55</num><text>Flight figs.</text></clue>
-            <clue><num>57</num><text>Pesterer</text></clue>
-            <clue><num>58</num><text>Yellowfin</text></clue>
-            <clue><num>59</num><text>Chain headquartered in Louisville</text></clue>
+            <clue><num>1</num><text>Christian sch. in Tulsa</text></clue>
+            <clue><num>2</num><text>Half of a list on how to behave</text></clue>
+            <clue><num>3</num><text>They all live in Texas, according to song</text></clue>
+            <clue><num>4</num><text>Some productive outs, for short</text></clue>
+            <clue><num>5</num><text>* Item disallowed at Alta and Deer Valley, notably</text></clue>
+            <clue><num>6</num><text>Yearly record</text></clue>
+            <clue><num>7</num><text>Popular TV drama with spinoffs</text></clue>
+            <clue><num>8</num><text>Follower of Gospels, for short</text></clue>
+            <clue><num>9</num><text>Approximate</text></clue>
+            <clue><num>10</num><text>Store that advertises a good deal</text></clue>
+            <clue><num>11</num><text>Modern diag. tool</text></clue>
+            <clue><num>12</num><text>First of a psychology triplet</text></clue>
+            <clue><num>13</num><text>Cubs’ home</text></clue>
+            <clue><num>15</num><text>First name in cosmetics</text></clue>
+            <clue><num>18</num><text>* Familiar sonic shock wave sound</text></clue>
+            <clue><num>21</num><text>Kidnaps</text></clue>
+            <clue><num>22</num><text>Recent reality dance show</text></clue>
+            <clue><num>23</num><text>* Early timepiece</text></clue>
+            <clue><num>25</num><text>Fume</text></clue>
+            <clue><num>27</num><text>* Harbor safety feature</text></clue>
+            <clue><num>28</num><text>Georgia neighbor</text></clue>
+            <clue><num>29</num><text>Removes eagerly, as wrapping paper</text></clue>
+            <clue><num>31</num><text>Formerly known as</text></clue>
+            <clue><num>33</num><text>What children should be, per old expression</text></clue>
+            <clue><num>36</num><text>Feature of many a Mustang</text></clue>
+            <clue><num>38</num><text>* Game-lengthening eventuality</text></clue>
+            <clue><num>41</num><text>Lavish, as praise</text></clue>
+            <clue><num>42</num><text>Sudden end to a match, briefly</text></clue>
+            <clue><num>47</num><text>Completed, as your current task</text></clue>
+            <clue><num>49</num><text>Unenthusiastic, as a response</text></clue>
+            <clue><num>52</num><text>Doesn’t drive, perhaps</text></clue>
+            <clue><num>54</num><text>An administration change might mark the end of one</text></clue>
+            <clue><num>57</num><text>Tantrum</text></clue>
+            <clue><num>59</num><text>Irish Rose’s beau on Broadway</text></clue>
+            <clue><num>60</num><text>Final word in many a small business name</text></clue>
+            <clue><num>61</num><text>It’s often past due in Italy?</text></clue>
+            <clue><num>62</num><text>City southeast of Amsterdam</text></clue>
+            <clue><num>63</num><text>Lead-in to Cap or Cat</text></clue>
+            <clue><num>64</num><text>Bambi’s aunt</text></clue>
+            <clue><num>65</num><text>"The Force Awakens" heroine</text></clue>
+            <clue><num>66</num><text>Grad sch. hopeful’s hurdle</text></clue>
         </downClues>
     </crossword>
     <crossword>
+        <id>12</id>
         <title>Listen Closely</title>
         <date>2018-06-01</date>
         <grid>
@@ -867,6 +981,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>11</id>
         <title>Don't Slip Up</title>
         <date>2018-05-01</date>
         <grid>
@@ -967,6 +1082,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>10</id>
         <title>Cinephilic Satisfaction</title>
         <date>2018-03-01</date>
         <grid>
@@ -1146,6 +1262,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>9</id>
         <title>Here Comes the Sun</title>
         <date>2018-01-15</date>
         <grid>
@@ -1253,6 +1370,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>8</id>
         <title>Never Break the Chain</title>
         <date>2018-01-01</date>
         <grid>
@@ -1444,6 +1562,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>7</id>
         <title>Show Your True Colors</title>
         <date>2017-12-01</date>
         <grid>
@@ -1631,6 +1750,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>6</id>
         <title>Capital Punishment</title>
         <date>2017-11-01</date>
         <grid>
@@ -1736,6 +1856,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>5</id>
         <title>Scared Yet?</title>
         <date>2017-10-31</date>
         <grid>
@@ -1833,6 +1954,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>4</id>
         <title>Year Round Fun</title>
         <date>2017-10-01</date>
         <grid>
@@ -1934,6 +2056,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>3</id>
         <title>Heed My Orders</title>
         <date>2017-07-01</date>
         <grid>
@@ -2039,6 +2162,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>2</id>
         <title>Second Time's the Charm</title>
         <date>2017-05-01</date>
         <grid>
@@ -2142,6 +2266,7 @@
         </downClues>
     </crossword>
     <crossword>
+        <id>1</id>
         <title>Party Time</title>
         <date>2017-04-01</date>
         <grid>
