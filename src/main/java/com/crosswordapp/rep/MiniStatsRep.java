@@ -2,11 +2,11 @@ package com.crosswordapp.rep;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 public class MiniStatsRep {
+    public String userToken;
     public Integer[] completedGames;
     public Integer[] startedGames;
     public Integer[] bestTimes;
@@ -15,12 +15,16 @@ public class MiniStatsRep {
     public BigDecimal[] checkPercents;
     public BigDecimal[] revealPercents;
     public Map<String, List<Integer>> activityOverTime;
+    public Integer currentStreak;
+    public Integer longestStreak;
 
     public MiniStatsRep() {}
 
-    public MiniStatsRep(Integer[] completedGames, Integer[] startedGames, Integer[] bestTimes,
+    public MiniStatsRep(String userToken, Integer[] completedGames, Integer[] startedGames, Integer[] bestTimes,
                         Date[] bestDates, BigDecimal[] averageTimes, BigDecimal[] checkPercents,
-                        BigDecimal[] revealPercents, Map<String, List<Integer>> activityOverTime) {
+                        BigDecimal[] revealPercents, Map<String, List<Integer>> activityOverTime,
+                        Integer currentStreak, Integer longestStreak) {
+        this.userToken = userToken;
         this.completedGames = completedGames;
         this.startedGames = startedGames;
         this.bestTimes = bestTimes;
@@ -29,5 +33,7 @@ public class MiniStatsRep {
         this.checkPercents = checkPercents;
         this.revealPercents = revealPercents;
         this.activityOverTime = activityOverTime;
+        this.currentStreak = currentStreak;
+        this.longestStreak = longestStreak;
     }
 }

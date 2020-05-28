@@ -4,6 +4,7 @@ import com.crosswordapp.exception.BoardException;
 import com.crosswordapp.object.CheckType;
 import com.crosswordapp.rep.BoardRep;
 import com.crosswordapp.rep.CrosswordRep;
+import com.crosswordapp.rep.RatingsRep;
 import com.crosswordapp.service.CrosswordService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,17 @@ public class CrosswordResource {
     @GetMapping(PATH + "/{userid}/all")
     public List<CrosswordRep> getAllCrosswords(@PathVariable String userid) {
         return crosswordService.findAll(userid);
+    }
+
+    @GetMapping(PATH + "/ratings")
+    public List<RatingsRep> getAllRatings() {
+        return crosswordService.getRatings();
+    }
+
+    @PostMapping(PATH + "/{id}/{userid}/rate")
+    public BoardRep rateCrossword(@RequestBody BoardRep board,
+                                  @PathVariable String id, @PathVariable String userid) {
+        return crosswordService.rateCrossword(id, userid, board);
     }
 
     @PutMapping(PATH + "/{id}/{userid}/update")

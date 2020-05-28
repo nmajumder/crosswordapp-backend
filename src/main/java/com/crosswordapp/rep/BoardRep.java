@@ -11,17 +11,18 @@ public class BoardRep {
     public List<List<String>> solution; // this will be null for normal xwords, filled in for generated minis
     public SquareSelection selection;
     public Integer numSeconds;
+    public Boolean completed;
+    public Integer difficultyRating;
+    public Integer enjoymentRating;
 
     public BoardRep() {}
 
-    public BoardRep(Board board, Boolean isMini) {
+    public BoardRep(Board board) {
         this.grid = board.getGrid();
-        if (isMini) {
-            this.solution = board.getSolution();
-        } else {
-            this.solution = null;
-        }
         this.selection = board.getSelection();
         this.numSeconds = board.getNumSeconds();
+        this.completed = board.getCompleted();
+        this.difficultyRating = board.getDifficultyRating();
+        this.enjoymentRating = board.getEnjoymentRating();
     }
 }

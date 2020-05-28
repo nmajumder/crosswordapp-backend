@@ -20,10 +20,28 @@ public class Board {
     private List<List<String>> solution;
 
     private SquareSelection selection;
-
     private Integer numSeconds;
+    private Boolean completed;
+    private Integer difficultyRating;
+    private Integer enjoymentRating;
 
     public Board(List<String> gridRows, Symmetry sym) {
+        initialize(gridRows, sym);
+    }
+
+    public Board(List<List<String>> solution) {
+        List<String> gridRows = new ArrayList<>();
+        for (int r = 0; r < solution.size(); r++) {
+            StringBuilder sb = new StringBuilder();
+            for (int c = 0; c < solution.size(); c++) {
+                sb.append(solution.get(r).get(c));
+            }
+            gridRows.add(sb.toString());
+        }
+        initialize(gridRows, Symmetry.DIAGONAL);
+    }
+
+    private void initialize(List<String> gridRows, Symmetry sym) {
         if (!xmlGridIsValid(gridRows, sym)) {
             throw new RuntimeException("Failed to create new board, check logs for errors");
         }
@@ -52,6 +70,9 @@ public class Board {
         resetSquareSelection(this.selection);
 
         numSeconds = 0;
+        completed = false;
+        difficultyRating = 0;
+        difficultyRating = 0;
     }
 
     private void resetSquareSelection(SquareSelection selection) {
@@ -211,16 +232,7 @@ public class Board {
                 }
             }
         }
-        markComplete(grid);
         return true;
-    }
-
-    private void markComplete(List<List<BoardSquare>> grid) {
-        for (int r = 0; r < this.height; r++) {
-            for (int c = 0; c < this.width; c++) {
-                grid.get(r).get(c).setStatus(SquareCheckStatus.Complete);
-            }
-        }
     }
 
     public Pair<Integer, Integer> getCoordinatesOfNumber(Integer clueNumber) {
@@ -303,6 +315,18 @@ public class Board {
     public Integer getNumSeconds() { return numSeconds; }
 
     public void setNumSeconds(Integer numSeconds) { this.numSeconds = numSeconds; }
+
+    public Boolean getCompleted() { return completed; }
+
+    public void setCompleted(Boolean completed) { this.completed = completed; }
+
+    public Integer getDifficultyRating() { return difficultyRating; }
+
+    public void setDifficultyRating(Integer rating) { this.difficultyRating = rating; }
+
+    public Integer getEnjoymentRating() { return enjoymentRating; }
+
+    public void setEnjoymentRating(Integer rating) { this.enjoymentRating = rating; }
 
     /***** CHECK, REVEAL, CLEAR FUNCTIONS *****/
 

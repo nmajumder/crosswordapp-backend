@@ -2,11 +2,8 @@ package com.crosswordapp.resource;
 
 import com.crosswordapp.StaticMiniGridService;
 import com.crosswordapp.generation.GenerationApp;
-import com.crosswordapp.object.MiniDifficulty;
-import com.crosswordapp.object.MiniGridTemplate;
-import com.crosswordapp.rep.MiniCompletedRep;
-import com.crosswordapp.rep.MiniRep;
-import com.crosswordapp.rep.MiniStatsRep;
+import com.crosswordapp.object.*;
+import com.crosswordapp.rep.*;
 import com.crosswordapp.service.MiniService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +25,13 @@ public class MiniResource {
     @GetMapping(PATH + "/{userid}/{size}/{difficulty}/generate")
     public MiniRep generateMini(@PathVariable String userid, @PathVariable Integer size,
                                 @PathVariable MiniDifficulty difficulty) {
-        miniService.recordMiniStarted(userid, size, difficulty);
-        return miniService.generateMini(size, difficulty);
+        Mini mini = miniService.generateMini(size, difficulty);
+        if (mini != null) {
+            miniService.recordMiniStarted(userid,
+                    new MiniSolutionRep(mini.getBoard().getSolution(), size, difficulty, false, false));
+        }
+
+        return new MiniRep(mini);
     }
 
     @GetMapping(PATH + "/{size}/generate/test")
@@ -61,13 +63,50 @@ public class MiniResource {
         return failuresList;
     }
 
-    @PostMapping(PATH + "/{userid}/completed")
-    public MiniStatsRep miniCompleted(@PathVariable String userid, @RequestBody MiniCompletedRep mini) {
-        return miniService.recordMiniStats(userid, mini);
+    @PutMapping(PATH + "/{userid}/isComplete")
+    public BoardRep miniIsComplete(@PathVariable String userid, @RequestBody BoardRep board) {
+        return miniService.miniIsComplete(userid, board);
     }
+
+    @PutMapping(PATH + "/{userid}/check/square")
+    public BoardRep checkSquare(@PathVariable String userid, @RequestBody BoardRep board) {
+        return miniService.checkMini(userid, CheckType.Square, board);
+    }
+
+    @PutMapping(PATH + "/{userid}/check/word")
+    public BoardRep checkWord(@PathVariable String userid, @RequestBody BoardRep board) {
+        return miniService.checkMini(userid, CheckType.Word, board);
+    }
+
+    @PutMapping(PATH + "/{userid}/check/puzzle")
+    public BoardRep checkPuzzle(@PathVariable String userid, @RequestBody BoardRep board) {
+        return miniService.checkMini(userid, CheckType.Puzzle, board);
+    }
+
+    @PutMapping(PATH + "/{userid}/reveal/square")
+    public BoardRep revealSquare(@PathVariable String userid, @RequestBody BoardRep board) {
+        return miniService.revealMini(userid, CheckType.Square, board);
+    }
+
+    @PutMapping(PATH + "/{userid}/reveal/word")
+    public BoardRep revealWord(@PathVariable String userid, @RequestBody BoardRep board) {
+        return miniService.revealMini(userid, CheckType.Word, board);
+    }
+
+    @PutMapping(PATH + "/{userid}/reveal/puzzle")
+    public BoardRep revealPuzzle(@PathVariable String userid, @RequestBody BoardRep board) {
+        return miniService.revealMini(userid, CheckType.Puzzle, board);
+    }
+
+    /* STATS AND LEADERBOARD RELATED ENDPOINTS */
 
     @GetMapping(PATH + "/{userid}/stats")
     public MiniStatsRep getMiniStats(@PathVariable String userid) {
         return miniService.getMiniStats(userid);
+    }
+
+    @GetMapping(PATH + "/{userid}/leaderboard")
+    public LeaderboardRep getLeaderboard(@PathVariable String userid) {
+        return miniService.getLeaderboard(userid);
     }
 }

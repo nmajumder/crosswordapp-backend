@@ -15,7 +15,7 @@ public class MiniRep {
 
     public MiniRep(Mini mini) {
         this.difficulty = mini.getDifficulty();
-        this.board = new BoardRep(mini.getBoard(), true);
+        this.board = new BoardRep(mini.getBoard());
         this.acrossClues = new ArrayList<>();
         for (Integer i: mini.getClueManager().getAcrossClueMap().keySet()) {
             Clue clue = mini.getClueManager().getAcrossClueMap().get(i);

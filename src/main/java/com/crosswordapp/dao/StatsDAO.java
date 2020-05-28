@@ -44,13 +44,16 @@ public class StatsDAO {
     private final static String CHECKED_COL = "check_percents";
     private final static String REVEALED_COL = "reveal_percents";
     private final static String ACTIVITY_COL = "activity_over_time";
+    private final static String LONG_STREAK_COL = "longest_streak";
 
     private final static String GET_STATS =
             "SELECT " + getFieldList(false, false, "ALL") + " FROM ministats"
                 + " WHERE " + getFieldList(true, false, USER_ID_COL);
+    private final static String GET_ALL_STATS =
+            "SELECT " + getFieldList(false, false, "ALL") + " FROM ministats";
     private final static String CREATE_STATS =
             "INSERT INTO ministats (" + getFieldList(false, false, "ALL")
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private final static String STARTED_GAME_UPDATE =
             "UPDATE ministats SET " + getFieldList(true, true, STARTED_COL)
                     + " WHERE " + getFieldList(true, false, USER_ID_COL);
@@ -58,7 +61,7 @@ public class StatsDAO {
             "UPDATE ministats SET "
                     + getFieldList(true, true, COMPLETED_COL, BEST_TIMES_COL,
                     BEST_DATES_COL, AVERAGES_COL, CHECKED_COL, REVEALED_COL)
-                    + ", " + getFieldList(true, false, ACTIVITY_COL)
+                    + ", " + getFieldList(true, false, ACTIVITY_COL, LONG_STREAK_COL)
                     + " WHERE " + getFieldList(true, false, USER_ID_COL);
 
     public void createStats(String userId) {
@@ -75,6 +78,7 @@ public class StatsDAO {
             ps.setArray(7, conn.createArrayOf("decimal", initCol));
             ps.setArray(8, conn.createArrayOf("decimal", initCol));
             ps.setObject(9, getJsonActivityMap(new HashMap<>()));
+            ps.setInt(10, 0);
             ps.execute();
             logger.info("Successfully created mini stats for user " + userId);
         } catch (SQLException e) {
@@ -121,8 +125,10 @@ public class StatsDAO {
         LocalDate today = LocalDate.now(ZoneId.systemDefault());
 
         if (miniRep.seconds < bestTime || bestTime == 0) {
-            bestTime = miniRep.seconds;
-            bestDate = Date.valueOf(today);
+            if (!miniRep.revealed && !miniRep.checked && miniRep.seconds > 0) {
+                bestTime = miniRep.seconds;
+                bestDate = Date.valueOf(today);
+            }
         }
         avgTime = ((avgTime * numGames) + miniRep.seconds) / (numGames + 1);
         checkedPct = miniRep.checked ?
@@ -134,14 +140,22 @@ public class StatsDAO {
         numGames++;
 
         if (activityMap == null) activityMap = new HashMap<>();
+
+        int curStreak = getCurrentStreak(activityMap);
+        int longStreak = curStats.longestStreak == null ? getLongestStreak(activityMap) : curStats.longestStreak;
+
         if (!activityMap.containsKey(today.toString()) || activityMap.get(today.toString()) == null) {
+            curStreak++;
+            if (curStreak > longStreak) {
+                longStreak = curStreak;
+            }
             activityMap.put(today.toString(), Arrays.asList(new Integer[15]));
         }
         if (activityMap.get(today.toString()).get(arrInd) == null) {
             activityMap.get(today.toString()).set(arrInd, 1);
         } else {
             int numGamesToday = activityMap.get(today.toString()).get(arrInd);
-            logger.info("The user has played " + numGamesToday + " today up to this point");
+            logger.debug("The user has played " + numGamesToday + " today in this category up to this point");
             activityMap.get(today.toString()).set(arrInd, numGamesToday + 1);
         }
 
@@ -160,7 +174,8 @@ public class StatsDAO {
             ps.setInt(11, arrInd);
             ps.setFloat(12, revealPct);
             ps.setObject(13, getJsonActivityMap(activityMap));
-            ps.setString(14, userid);
+            ps.setInt(14, longStreak);
+            ps.setString(15, userid);
             ps.execute();
             logger.info("Successfully updated game complete stats for user " + userid);
         } catch (SQLException e) {
@@ -174,6 +189,7 @@ public class StatsDAO {
             ps.setString(1, userId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    String userToken = rs.getString(USER_ID_COL);
                     Integer[] completedGames = (Integer[]) rs.getArray(COMPLETED_COL).getArray();
                     Integer[] startedGames = (Integer[]) rs.getArray(STARTED_COL).getArray();
                     Integer[] bestTimes = (Integer[]) rs.getArray(BEST_TIMES_COL).getArray();
@@ -183,9 +199,12 @@ public class StatsDAO {
                     BigDecimal[] revealPercents = (BigDecimal[]) rs.getArray(REVEALED_COL).getArray();
                     String activityMapStr = rs.getString(ACTIVITY_COL);
                     Map<String, List<Integer>> activityMap = getActivityMapFromJson(activityMapStr);
+                    Integer curStreak = getCurrentStreak(activityMap);
+                    Integer longStreak = rs.getInt(LONG_STREAK_COL);
+                    if (longStreak == 0) longStreak = getLongestStreak(activityMap);
                     MiniStatsRep miniRep =
-                            new MiniStatsRep(completedGames, startedGames, bestTimes, bestDates, averageTimes,
-                                    checkPercents, revealPercents, activityMap);
+                            new MiniStatsRep(userToken, completedGames, startedGames, bestTimes, bestDates,
+                                    averageTimes, checkPercents, revealPercents, activityMap, curStreak, longStreak);
                     logger.info("Successfully retrieved mini stats for user " + userId);
                     return miniRep;
                 }
@@ -194,6 +213,38 @@ public class StatsDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to retrieve mini stats for user " + userId, e);
+        }
+    }
+
+    public List<MiniStatsRep> getAllStats() {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(GET_ALL_STATS);
+             ResultSet rs = ps.executeQuery()) {
+            List<MiniStatsRep> statsReps = new ArrayList<>();
+            while (rs.next()) {
+                String userid = rs.getString(USER_ID_COL);
+                Integer[] completedGames = (Integer[]) rs.getArray(COMPLETED_COL).getArray();
+                Integer[] startedGames = (Integer[]) rs.getArray(STARTED_COL).getArray();
+                Integer[] bestTimes = (Integer[]) rs.getArray(BEST_TIMES_COL).getArray();
+                Date[] bestDates = (Date[]) rs.getArray(BEST_DATES_COL).getArray();
+                BigDecimal[] averageTimes = (BigDecimal[]) rs.getArray(AVERAGES_COL).getArray();
+                BigDecimal[] checkPercents = (BigDecimal[]) rs.getArray(CHECKED_COL).getArray();
+                BigDecimal[] revealPercents = (BigDecimal[]) rs.getArray(REVEALED_COL).getArray();
+                String activityMapStr = rs.getString(ACTIVITY_COL);
+                Map<String, List<Integer>> activityMap = getActivityMapFromJson(activityMapStr);
+                Integer curStreak = getCurrentStreak(activityMap);
+                Integer longStreak = rs.getInt(LONG_STREAK_COL);
+                if (longStreak == 0) longStreak = getLongestStreak(activityMap);
+                MiniStatsRep statsRep =
+                        new MiniStatsRep(userid, completedGames, startedGames, bestTimes, bestDates, averageTimes,
+                                checkPercents, revealPercents, activityMap, curStreak, longStreak);
+                logger.debug("Successfully retrieved mini stats for user " + userid);
+                statsReps.add(statsRep);
+            }
+            logger.info("Successfully retrieved mini stats for " + statsReps.size() + " users");
+            return statsReps;
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to retrieve mini stats for all users", e);
         }
     }
 
@@ -219,13 +270,56 @@ public class StatsDAO {
         }
     }
 
+    private int getCurrentStreak(Map<String, List<Integer>> activityMap) {
+        LocalDate day = LocalDate.now(ZoneId.systemDefault());
+        int streak = 0;
+        if (activityMap.containsKey(day.toString())) {
+            streak++;
+        }
+        day = day.minusDays(1);
+        while (activityMap.containsKey(day.toString())) {
+            streak++;
+            day = day.minusDays(1);
+        }
+        return streak;
+    }
+
+    private int getLongestStreak(Map<String, List<Integer>> activityMap) {
+        LocalDate minDate = null;
+        for (String dateStr : activityMap.keySet()) {
+            LocalDate thisDate = LocalDate.parse(dateStr);
+            if (minDate == null || thisDate.isBefore(minDate)) {
+                minDate = thisDate;
+            }
+        }
+        if (minDate == null) return 0;
+
+        int tempStreak = 0;
+        int longStreak = 0;
+        while (minDate.isBefore(LocalDate.now(ZoneId.systemDefault()))) {
+            if (activityMap.containsKey(minDate.toString())) {
+                tempStreak++;
+            } else {
+                if (tempStreak > longStreak) {
+                    longStreak = tempStreak;
+                }
+                tempStreak = 0;
+            }
+            minDate = minDate.plusDays(1);
+        }
+        if (tempStreak > longStreak) {
+            longStreak = tempStreak;
+        }
+        return longStreak;
+    }
+
     private static String getFieldList(boolean setter, boolean arrayBrackets, String... args) {
         if (args.length == 0) {
             return "";
         }
         if (args.length == 1 && args[0].equals("ALL")) {
             args = new String[]{USER_ID_COL, COMPLETED_COL, STARTED_COL, BEST_TIMES_COL, BEST_DATES_COL,
-                    AVERAGES_COL, CHECKED_COL, REVEALED_COL, ACTIVITY_COL};
+                    AVERAGES_COL, CHECKED_COL, REVEALED_COL, ACTIVITY_COL, LONG_STREAK_COL};
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.length; i++) {
