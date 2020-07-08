@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
+@CrossOrigin
 @RestController
 public class MiniResource {
     final static String PATH = "/api/mini";

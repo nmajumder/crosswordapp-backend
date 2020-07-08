@@ -117,7 +117,7 @@ public class MinisDAO {
              PreparedStatement ps = conn.prepareStatement(UPDATE_MINI_FOR_USER)) {
             ps.setObject(1, getJsonGrid(new ArrayList<>()));
             ps.setInt(2, 0);
-            ps.setString(3, MiniDifficulty.Easy.toString());
+            ps.setString(3, MiniDifficulty.Standard.toString());
             ps.setBoolean(4, false);
             ps.setBoolean(5, false);
             ps.setString(6, userId);

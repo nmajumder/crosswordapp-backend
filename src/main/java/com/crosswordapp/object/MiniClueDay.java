@@ -6,12 +6,12 @@ public enum MiniClueDay {
     public MiniDifficulty getDifficulty() {
         switch(this) {
             case Mon:
-            case Tue: return MiniDifficulty.Easy;
+            case Tue: return MiniDifficulty.Standard;
             case Wed:
-            case Sun: return MiniDifficulty.Moderate;
+            case Sun: return MiniDifficulty.Difficult;
             case Thu:
             case Fri:
-            case Sat: return MiniDifficulty.Hard;
+            case Sat: return MiniDifficulty.Expert;
         }
         return null;
     }

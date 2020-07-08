@@ -67,5 +67,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>crossword-spring-boot-server</finalName>
     </build>
 </project>

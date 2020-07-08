@@ -32,17 +32,16 @@ public class UserDAO {
     private final static String PASSWORD_COL = "password";
     private final static String COLOR_SCHEME_COL = "color_scheme";
     private final static String INACTIVITY_TIMER_COL = "inactivity_timer";
-    private final static String PLAY_SOUND_COL = "play_sound";
 
     private final static String GET_USER_BY_EMAIL =
-            "SELECT " + getFieldList(false, TOKEN_COL, USER_COL, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL, PLAY_SOUND_COL)
+            "SELECT " + getFieldList(false, TOKEN_COL, USER_COL, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL)
                     + " FROM users WHERE " + getFieldList(true, EMAIL_COL);
     private final static String GET_USER_BY_PASSWORD =
-            "SELECT " + getFieldList(false, TOKEN_COL, USER_COL, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL, PLAY_SOUND_COL)
+            "SELECT " + getFieldList(false, TOKEN_COL, USER_COL, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL)
                     + " FROM users WHERE " + getFieldList(true, EMAIL_COL)
                     + " AND " + getFieldList(true, PASSWORD_COL);
     private final static String GET_USER_BY_TOKEN =
-            "SELECT " + getFieldList(false, EMAIL_COL, USER_COL, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL, PLAY_SOUND_COL)
+            "SELECT " + getFieldList(false, EMAIL_COL, USER_COL, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL)
                     + " FROM users WHERE " + getFieldList(true, TOKEN_COL);
     private final static String UPDATE_PASSWORD =
             "UPDATE users SET " + getFieldList(true, PASSWORD_COL) + " WHERE " + getFieldList(true, EMAIL_COL);
@@ -50,12 +49,12 @@ public class UserDAO {
             "SELECT " + getFieldList(false, TOKEN_COL, PASSWORD_COL)
                     + " FROM users WHERE " + getFieldList(true, EMAIL_COL);
     private final static String CREATE_USER =
-            "INSERT INTO users (" + getFieldList(false, "ALL") + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO users (" + getFieldList(false, "ALL") + ") VALUES (?, ?, ?, ?, ?, ?)";
     private final static String UPDATE_USER =
             "UPDATE users SET " + getFieldList(true, EMAIL_COL, USER_COL, PASSWORD_COL)
                     + " WHERE " + getFieldList(true, TOKEN_COL);
     private final static String UPDATE_SETTINGS =
-            "UPDATE users SET " + getFieldList(true, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL, PLAY_SOUND_COL)
+            "UPDATE users SET " + getFieldList(true, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL)
                     + " WHERE " + getFieldList(true, TOKEN_COL);
 
     public User createUser(String email, String username, String password) {
@@ -69,7 +68,6 @@ public class UserDAO {
             ps.setString(4, passwordEncoder.encode(password));
             ps.setInt(5, settings.getColorScheme());
             ps.setInt(6, settings.getInactivityTimer());
-            ps.setBoolean(7, settings.getPlaySound());
             ps.execute();
             User user = new User(token.toString(), email, username, settings);
             logger.info("Successfully created user with email: " + user.getEmail());
@@ -102,8 +100,7 @@ public class UserDAO {
              PreparedStatement ps = conn.prepareStatement(UPDATE_SETTINGS)) {
             ps.setInt(1, settings.getColorScheme());
             ps.setInt(2, settings.getInactivityTimer());
-            ps.setBoolean(3, settings.getPlaySound());
-            ps.setString(4, token);
+            ps.setString(3, token);
             int recordsUpdated = ps.executeUpdate();
             if (recordsUpdated != 1) {
                 logger.error("Failed to update settings, could not find target token: " + token);
@@ -205,8 +202,7 @@ public class UserDAO {
                     String username = rs.getString(USER_COL);
                     Integer colorScheme = rs.getInt(COLOR_SCHEME_COL);
                     Integer inactivityTimer = rs.getInt(INACTIVITY_TIMER_COL);
-                    Boolean playSound = rs.getBoolean(PLAY_SOUND_COL);
-                    Settings settings = new Settings(colorScheme, inactivityTimer, playSound);
+                    Settings settings = new Settings(colorScheme, inactivityTimer);
                     logger.info("Successfully validated token for email: " + email);
                     return new User(token, email, username, settings);
                 }
@@ -242,7 +238,7 @@ public class UserDAO {
         }
         if (args.length == 1 && args[0].equals("ALL")) {
             args = new String[]{TOKEN_COL, EMAIL_COL, USER_COL, PASSWORD_COL,
-                    COLOR_SCHEME_COL, INACTIVITY_TIMER_COL, PLAY_SOUND_COL};
+                    COLOR_SCHEME_COL, INACTIVITY_TIMER_COL};
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < args.length; i++) {

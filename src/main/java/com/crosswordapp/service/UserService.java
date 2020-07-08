@@ -1,5 +1,6 @@
 package com.crosswordapp.service;
 
+import com.crosswordapp.dao.StatsDAO;
 import com.crosswordapp.dao.UserDAO;
 import com.crosswordapp.object.User;
 import com.crosswordapp.rep.*;
@@ -20,6 +21,9 @@ public class UserService {
     private UserDAO userDAO;
 
     @Autowired
+    private StatsDAO statsDAO;
+
+    @Autowired
     private JavaMailSender emailSender;
 
     public UserResponseRep createUser(UserCreateRep userRep) {
@@ -28,6 +32,7 @@ public class UserService {
             return new UserResponseRep(false, "This email is already associated with an account.");
         } else {
             User user = userDAO.createUser(userRep.email, userRep.username, userRep.password);
+            statsDAO.initializeAllStatsForUser(user.getToken());
             return new UserResponseRep(true, user);
         }
     }

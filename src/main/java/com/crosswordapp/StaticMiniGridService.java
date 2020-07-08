@@ -48,10 +48,10 @@ public class StaticMiniGridService {
             return null;
         }
         double rand = Math.random();
-        if (difficulty.equals(MiniDifficulty.Hard)) {
+        if (difficulty.equals(MiniDifficulty.Expert)) {
             // move 10% closer to 0 (fewer blacks in grid)
             rand *= .9;
-        } else if (difficulty.equals(MiniDifficulty.Easy)) {
+        } else if (difficulty.equals(MiniDifficulty.Standard)) {
             // move 10% closer to 1 (more blacks in grid)
             rand += (1-rand) * .1;
         }
