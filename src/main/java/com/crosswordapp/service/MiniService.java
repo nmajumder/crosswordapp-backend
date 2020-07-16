@@ -1,10 +1,7 @@
 package com.crosswordapp.service;
 
-import com.crosswordapp.ClueManager;
-import com.crosswordapp.StaticMiniClueService;
-import com.crosswordapp.StaticMiniGridService;
+import com.crosswordapp.*;
 import com.crosswordapp.dao.LeaderboardDAO;
-import com.crosswordapp.dao.MinisDAO;
 import com.crosswordapp.dao.StatsDAO;
 import com.crosswordapp.dao.UserDAO;
 import com.crosswordapp.generation.GenerationApp;
@@ -28,9 +25,6 @@ public class MiniService {
 
     @Autowired
     private StatsDAO statsDAO;
-
-    @Autowired
-    private MinisDAO minisDAO;
 
     @Autowired
     private LeaderboardDAO leaderboardDAO;
@@ -159,7 +153,7 @@ public class MiniService {
     }
 
     public BoardRep checkMini(String userId, CheckType type, BoardRep boardRep) {
-        MiniSolutionRep miniSolution = minisDAO.getMiniSolution(userId);
+        MiniSolutionRep miniSolution = MiniBoardCache.getBoardForUser(userId);
         if (miniSolution == null) {
             logger.error("Cannot check mini, no current mini exists for user: " + userId);
             return null;
@@ -167,12 +161,12 @@ public class MiniService {
         Board board = new Board(miniSolution.solution);
         board.check(type, boardRep.grid, boardRep.selection);
         miniSolution.checked = true;
-        minisDAO.updateMini(userId, miniSolution);
+        MiniBoardCache.addOrUpdateBoardForUser(userId, miniSolution);
         return boardRep;
     }
 
     public BoardRep revealMini(String userId, CheckType type, BoardRep boardRep) {
-        MiniSolutionRep miniSolution = minisDAO.getMiniSolution(userId);
+        MiniSolutionRep miniSolution = MiniBoardCache.getBoardForUser(userId);
         if (miniSolution == null) {
             logger.error("Cannot reveal mini, no current mini exists for user: " + userId);
             return null;
@@ -180,12 +174,12 @@ public class MiniService {
         Board board = new Board(miniSolution.solution);
         board.reveal(type, boardRep.grid, boardRep.selection);
         miniSolution.revealed = true;
-        minisDAO.updateMini(userId, miniSolution);
+        MiniBoardCache.addOrUpdateBoardForUser(userId, miniSolution);
         return boardRep;
     }
 
     public BoardRep miniIsComplete(String userId, BoardRep boardRep) {
-        MiniSolutionRep miniSolution = minisDAO.getMiniSolution(userId);
+        MiniSolutionRep miniSolution = MiniBoardCache.getBoardForUser(userId);
         if (miniSolution == null) {
             logger.error("Cannot determine completeness of mini, no current mini exists for user: " + userId);
             return null;
@@ -196,7 +190,8 @@ public class MiniService {
             statsDAO.updateMiniCompleted(userId,
                     new MiniCompletedRep(miniSolution.size, miniSolution.difficulty, boardRep.numSeconds,
                             miniSolution.checked, miniSolution.revealed));
-            minisDAO.resetMini(userId);
+            MiniBoardCache.resetBoardForUser(userId);
+            LeaderboardCache.markLeaderboardChanged();
             boardRep.completed = true;
         }
         return boardRep;
@@ -205,11 +200,8 @@ public class MiniService {
     public void recordMiniStarted(String userToken, MiniSolutionRep miniSolution) {
         if (userDAO.validateToken(userToken) != null) {
             statsDAO.updateMiniStarted(userToken, miniSolution.size, miniSolution.difficulty);
-            if (minisDAO.getMiniSolution(userToken) == null) {
-                minisDAO.createMini(userToken, miniSolution);
-            } else {
-                minisDAO.updateMini(userToken, miniSolution);
-            }
+            MiniBoardCache.addOrUpdateBoardForUser(userToken, miniSolution);
+            LeaderboardCache.markLeaderboardChanged();
             logger.debug("User " + userToken + " began a mini puzzle");
         } else {
             logger.error("Unable to log start of mini puzzle, user does not exist: " + userToken);
@@ -226,6 +218,6 @@ public class MiniService {
     }
 
     public LeaderboardRep getLeaderboard(String userToken) {
-        return leaderboardDAO.getLeaderboard();
+        return LeaderboardCache.getLeaderboard();
     }
 }

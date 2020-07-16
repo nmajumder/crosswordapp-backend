@@ -1,6 +1,8 @@
 package com.crosswordapp.dao;
 
+import com.crosswordapp.StaticCrosswordService;
 import com.crosswordapp.object.BoardSquare;
+import com.crosswordapp.object.Crossword;
 import com.crosswordapp.object.Rating;
 import com.crosswordapp.object.SquareSelection;
 import com.crosswordapp.rep.BoardRep;
@@ -11,12 +13,15 @@ import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class BoardDAO {
@@ -51,9 +56,13 @@ public class BoardDAO {
                                                     COMPLETED_COL, DIF_RATING_COL, ENJ_RATING_COL) + " FROM boards"
                     + " WHERE " + getFieldList(true, USER_ID_COL)
                     + " AND " + getFieldList(true, CROSSWORD_ID_COL);
+    private final static String GET_ALL_BOARDS =
+            "SELECT " + getFieldList(false, CROSSWORD_ID_COL, GRID_COL, SELECTION_COL, SECONDS_COL,
+                                                    COMPLETED_COL, DIF_RATING_COL, ENJ_RATING_COL) + " FROM boards"
+                    + " WHERE " + getFieldList(true, USER_ID_COL);
     private final static String GET_ALL_RATINGS =
             "SELECT " + getFieldList(false, CROSSWORD_ID_COL, DIF_RATING_COL, ENJ_RATING_COL)
-                    + " FROM boards";
+                    + " FROM boards WHERE " + DIF_RATING_COL + " > 0 AND " + ENJ_RATING_COL + " > 0";
 
     public void createBoard(String userId, String crosswordId, BoardRep board) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
@@ -73,6 +82,15 @@ public class BoardDAO {
         }
     }
 
+    @Async
+    public void initializeAllBoardsForUser(String userId) {
+        for (Crossword c: StaticCrosswordService.getCrosswordMap().values()) {
+            BoardRep boardRep = new BoardRep(c.getBoard());
+            createBoard(userId, c.getId(), boardRep);
+        }
+    }
+
+    @Async
     public void updateBoard(String userId, String crosswordId, BoardRep board) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(UPDATE_BOARD)) {
@@ -114,6 +132,31 @@ public class BoardDAO {
             }
         } catch (SQLException e) {
             throw new RuntimeException("Failed to retrieve board for crossword " + crosswordId + " for user " + userId, e);
+        }
+    }
+
+    public Map<String, BoardRep> getAllBoardsForUser(String userId) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(GET_ALL_BOARDS)) {
+            ps.setString(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                Map<String, BoardRep> boardMap = new HashMap<>();
+                while (rs.next()) {
+                    String crosswordId = rs.getString(CROSSWORD_ID_COL);
+                    String gridStr = rs.getString(GRID_COL);
+                    String selectionStr = rs.getString(SELECTION_COL);
+                    Integer seconds = rs.getInt(SECONDS_COL);
+                    Boolean completed = rs.getBoolean(COMPLETED_COL);
+                    Integer difRating = rs.getInt(DIF_RATING_COL);
+                    Integer enjRating = rs.getInt(ENJ_RATING_COL);
+                    boardMap.put(crosswordId, getBoardFromJson(gridStr, selectionStr, seconds, completed, difRating, enjRating));
+                    logger.debug("Successfully retrieved board for user " + userId + " and crossword " + crosswordId);
+                }
+                logger.info("Successfully retrieved " + boardMap.values().size() + " boards for user " + userId);
+                return boardMap;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to retrieve all boards for user " + userId, e);
         }
     }
 

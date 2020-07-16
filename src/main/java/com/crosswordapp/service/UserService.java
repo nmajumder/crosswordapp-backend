@@ -1,5 +1,7 @@
 package com.crosswordapp.service;
 
+import com.crosswordapp.dao.BoardDAO;
+import com.crosswordapp.dao.CommentDAO;
 import com.crosswordapp.dao.StatsDAO;
 import com.crosswordapp.dao.UserDAO;
 import com.crosswordapp.object.User;
@@ -21,27 +23,31 @@ public class UserService {
     private UserDAO userDAO;
 
     @Autowired
+    private BoardDAO boardDAO;
+
+    @Autowired
     private StatsDAO statsDAO;
+
+    @Autowired
+    private CommentDAO commentDAO;
 
     @Autowired
     private JavaMailSender emailSender;
 
     public UserResponseRep createUser(UserCreateRep userRep) {
-        if (userDAO.userExists(userRep.email)) {
-            logger.error("Email is already used on an account: " + userRep.email);
-            return new UserResponseRep(false, "This email is already associated with an account.");
-        } else {
+        String conflict = userDAO.getUserConflict(userRep.email, userRep.username);
+        if ("".equals(conflict)) {
             User user = userDAO.createUser(userRep.email, userRep.username, userRep.password);
+            boardDAO.initializeAllBoardsForUser(user.getToken());
             statsDAO.initializeAllStatsForUser(user.getToken());
             return new UserResponseRep(true, user);
+        } else {
+            logger.warn("Received user creation conflict for user " + userRep.email + ", " + userRep.username);
+            return new UserResponseRep(false, conflict);
         }
     }
 
     public UserResponseRep loginUser(UserLoginRep userRep) {
-        if (!userDAO.userExists(userRep.email)) {
-            logger.error("No account found with email: " + userRep.email);
-            return new UserResponseRep(false, "email error");
-        }
         User user = userDAO.validatePassword(userRep.email, userRep.password);
         if (user == null) {
             logger.error("Password incorrect for email: " + userRep.email);
@@ -76,10 +82,8 @@ public class UserService {
     }
 
     public UserResponseRep linkUser(UserLinkRep userRep) {
-        if (userDAO.userExists(userRep.newAccount.email)) {
-            logger.error("New account email for link is already associated with an account: " + userRep.newAccount.email);
-            return new UserResponseRep(false, "The new account email is already associated with an account.");
-        } else {
+        String conflict = userDAO.getUserConflict(userRep.newAccount.email, userRep.newAccount.username);
+        if ("".equals(conflict)) {
             User user = userDAO.updateUser(userRep.token, userRep.newAccount.email,
                     userRep.newAccount.username, userRep.newAccount.password);
             if (user == null) {
@@ -88,6 +92,9 @@ public class UserService {
             } else {
                 return new UserResponseRep(true, user);
             }
+        } else {
+            logger.warn("Received user creation conflict for user " + userRep.newAccount.email + ", " + userRep.newAccount.username);
+            return new UserResponseRep(false, conflict);
         }
     }
 
@@ -116,10 +123,16 @@ public class UserService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(targetEmail);
         message.setSubject("Password reset for crossword app");
-        String body = "Please login using the following code as your password, " +
-                "and then go through the normal password change process: " + tempPassword;
+        String body = "Your temporary password is the code specified below. "
+                + "Please copy paste this as your password to login, "
+                + "and then go through the normal change password process once you are in.\n\n"
+                + "Code: " + tempPassword;
         message.setText(body);
         emailSender.send(message);
+    }
+
+    public void postComment(UserCommentRep commentRep) {
+        commentDAO.postComment(commentRep);
     }
 
 }

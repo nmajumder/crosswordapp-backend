@@ -28,8 +28,9 @@ public class CrosswordService {
 
     public List<CrosswordRep> findAll(String userid) {
         List<CrosswordRep> reps = new ArrayList<>();
+        Map<String, BoardRep> boardReps = boardDAO.getAllBoardsForUser(userid);
         for (Crossword c: StaticCrosswordService.getCrosswordMap().values()) {
-            BoardRep boardRep = boardDAO.getBoard(userid, c.getId());
+            BoardRep boardRep = boardReps.get(c.getId());
             if (boardRep == null) {
                 boardRep = new BoardRep(c.getBoard());
                 boardDAO.createBoard(userid, c.getId(), boardRep);
@@ -44,13 +45,12 @@ public class CrosswordService {
     public List<RatingsRep> getRatings() {
         List<Rating> allRatings = boardDAO.getAllRatings();
         Map<String, RatingsRep> ratingsMap = new HashMap<>();
+        for (String crosswordId : StaticCrosswordService.getCrosswordMap().keySet()) {
+            ratingsMap.put(crosswordId, new RatingsRep(crosswordId));
+        }
 
         for (Rating rating : allRatings) {
             String id = rating.getCrosswordId();
-            if (!ratingsMap.containsKey(id)) {
-                ratingsMap.put(id, new RatingsRep());
-                ratingsMap.get(id).crosswordId = id;
-            }
             if (rating.getDifficultyRating() != null && rating.getDifficultyRating() > 0) {
                 ratingsMap.get(id).difficultyScore += rating.getDifficultyRating();
                 ratingsMap.get(id).numDifficultyRatings++;
@@ -97,32 +97,21 @@ public class CrosswordService {
         boardDAO.updateBoard(userid, id, board);
     }
 
-    public BoardRep crosswordIsComplete(String id, String userid) {
-        BoardRep boardRep = boardDAO.getBoard(userid, id);
-        if (boardRep == null) {
-            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
-        }
+    public BoardRep crosswordIsComplete(String id, String userid, BoardRep boardRep) {
         Crossword c = StaticCrosswordService.getCrossword(id);
         boardRep.completed = c.getBoard().gridIsSolved(boardRep.grid);
         boardDAO.updateBoard(userid, id, boardRep);
         return boardRep;
     }
 
-    public BoardRep checkCrossword(String id, String userid, CheckType type) {
-        BoardRep boardRep = boardDAO.getBoard(userid, id);
-        if (boardRep == null) {
-            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
-        }
+    public BoardRep checkCrossword(String id, String userid, BoardRep boardRep, CheckType type) {
         Crossword c = StaticCrosswordService.getCrossword(id);
         c.getBoard().check(type, boardRep.grid, boardRep.selection);
+        boardDAO.updateBoard(userid, id, boardRep);
         return boardRep;
     }
 
-    public BoardRep revealCrossword(String id, String userid, CheckType type) {
-        BoardRep boardRep = boardDAO.getBoard(userid, id);
-        if (boardRep == null) {
-            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
-        }
+    public BoardRep revealCrossword(String id, String userid, BoardRep boardRep, CheckType type) {
         Crossword c = StaticCrosswordService.getCrossword(id);
         c.getBoard().reveal(type, boardRep.grid, boardRep.selection);
         boardRep.completed = c.getBoard().gridIsSolved(boardRep.grid);
@@ -130,13 +119,10 @@ public class CrosswordService {
         return boardRep;
     }
 
-    public BoardRep resetCrossword(String id, String userid) {
-        BoardRep boardRep = boardDAO.getBoard(userid, id);
-        if (boardRep == null) {
-            throw new BoardException("User {} does not have a crossword with id {}", userid, id);
-        }
+    public BoardRep resetCrossword(String id, String userid, BoardRep boardRep) {
         Crossword c = StaticCrosswordService.getCrossword(id);
         c.getBoard().reset(boardRep.grid, boardRep.selection);
+        boardDAO.updateBoard(userid, id, boardRep);
         return boardRep;
     }
 }

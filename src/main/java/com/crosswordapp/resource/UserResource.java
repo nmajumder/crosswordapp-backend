@@ -51,4 +51,9 @@ public class UserResource {
         return userService.resetPassword(user.email);
     }
 
+    @PostMapping(PATH + "/comment")
+    public void submitComment(@RequestBody UserCommentRep commentRep) {
+        userService.postComment(commentRep);
+    }
+
 }

@@ -12,6 +12,7 @@ import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -253,6 +254,7 @@ public class StatsDAO {
         }
     }
 
+    @Async
     public void initializeAllStatsForUser(String userId) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             conn.setAutoCommit(false);
@@ -274,6 +276,7 @@ public class StatsDAO {
         UPDATE STATS METHODS FOR STARTED GAMES
      */
 
+    @Async
     public void updateMiniStarted(String userId, Integer size, MiniDifficulty difficulty) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             conn.setAutoCommit(false);
@@ -345,6 +348,7 @@ public class StatsDAO {
         }
     }
 
+    @Async
     public void updateMiniCompleted(String userId, MiniCompletedRep miniRep) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS)) {
             conn.setAutoCommit(false);

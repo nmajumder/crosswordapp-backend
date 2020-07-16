@@ -1,12 +1,10 @@
 package com.crosswordapp.dao;
 
-import com.crosswordapp.object.BoardSquare;
 import com.crosswordapp.object.MiniDifficulty;
 import com.crosswordapp.rep.MiniSolutionRep;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.apache.regexp.internal.RE;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

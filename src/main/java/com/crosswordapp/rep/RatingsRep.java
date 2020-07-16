@@ -9,6 +9,14 @@ public class RatingsRep {
 
     public RatingsRep() {}
 
+    public RatingsRep(String crosswordId) {
+        this.crosswordId = crosswordId;
+        this.difficultyScore = 0;
+        this.numDifficultyRatings = 0;
+        this.enjoymentScore = 0;
+        this.numEnjoymentRatings = 0;
+    }
+
     public RatingsRep(String crosswordId, float difficultyScore, int numDifficultyRatings,
                       float enjoymentScore, int numEnjoymentRatings) {
         this.crosswordId = crosswordId;

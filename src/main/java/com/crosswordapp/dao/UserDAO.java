@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -43,6 +45,9 @@ public class UserDAO {
     private final static String GET_USER_BY_TOKEN =
             "SELECT " + getFieldList(false, EMAIL_COL, USER_COL, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL)
                     + " FROM users WHERE " + getFieldList(true, TOKEN_COL);
+    private final static String CHECK_USER_UNIQUE =
+            "SELECT " + getFieldList(false, EMAIL_COL, USER_COL) + " FROM users WHERE "
+                    + getFieldList(true, EMAIL_COL) + " OR " + getFieldList(true, USER_COL);
     private final static String UPDATE_PASSWORD =
             "UPDATE users SET " + getFieldList(true, PASSWORD_COL) + " WHERE " + getFieldList(true, EMAIL_COL);
     private final static String GET_PASSWORD_FOR_VALIDATION =
@@ -110,6 +115,33 @@ public class UserDAO {
             return validateToken(token);
         } catch(SQLException e) {
             throw new RuntimeException("Failed to update settings for token: " + token, e);
+        }
+    }
+
+    public String getUserConflict(String email, String username) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(CHECK_USER_UNIQUE)) {
+            ps.setString(1, email);
+            ps.setString(2, username);
+            try (ResultSet rs = ps.executeQuery()) {
+                boolean emailConflict = false;
+                boolean userConflict = false;
+                while (rs.next()) {
+                    String rsEmail = rs.getString(EMAIL_COL);
+                    String rsUser = rs.getString(USER_COL);
+                    if (rsEmail.equals(email)) {
+                        emailConflict = true;
+                    }
+                    if (rsUser.equals(username)) {
+                        userConflict = true;
+                    }
+                }
+                if (emailConflict) return "This email is already associated with an account.";
+                if (userConflict) return "This username is already in use.";
+                return "";
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to execute user uniqueness query for email: " + email + ", username: " + username, e);
         }
     }
 
@@ -215,10 +247,10 @@ public class UserDAO {
     }
 
     public String resetPassword(String email) {
-        String token = getTokenByEmail(email);
+        UUID randomPassword = UUID.randomUUID();
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
             PreparedStatement ps = conn.prepareStatement(UPDATE_PASSWORD)) {
-            ps.setString(1, passwordEncoder.encode(token));
+            ps.setString(1, passwordEncoder.encode(randomPassword.toString()));
             ps.setString(2, email);
             int recordsUpdated = ps.executeUpdate();
             if (recordsUpdated != 1) {
@@ -226,7 +258,7 @@ public class UserDAO {
                 return null;
             }
             logger.info("Successfully reset password for account with email: " + email);
-            return token;
+            return randomPassword.toString();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to reset password for account with email: " + email, e);
         }

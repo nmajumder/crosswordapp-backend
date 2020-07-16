@@ -53,3 +53,10 @@ CREATE INDEX tot_stats_longstreak_idx ON TOTAL_STATS (longest_streak);
  */
 CREATE TABLE MINIBOARDS (user_id varchar(64) REFERENCES users(token), mini_solution json not null, size integer not null, difficulty varchar(16) not null, checked boolean not null, revealed boolean not null);
 CREATE INDEX miniboards_user_index ON MINIBOARDS (user_id);
+
+/* TABLE: COMMENTS
+ *	stores comments from users
+ *	cols for user token, comment type, comment text
+ * foreign key dependency on USERS
+ */
+CREATE TABLE COMMENTS (user_id varchar(64) REFERENCES users(token), comment_type varchar(16), comment_text text);
