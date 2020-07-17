@@ -122,7 +122,7 @@ public class UserService {
     private void sendPasswordMessage(String targetEmail, String tempPassword) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(targetEmail);
-        message.setSubject("Password reset for crossword app");
+        message.setSubject("Password reset for CrosswordInfinity.com");
         String body = "Your temporary password is the code specified below. "
                 + "Please copy paste this as your password to login, "
                 + "and then go through the normal change password process once you are in.\n\n"
