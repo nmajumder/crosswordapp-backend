@@ -1,5 +1,6 @@
 package com.crosswordapp.service;
 
+import com.crosswordapp.LeaderboardCache;
 import com.crosswordapp.dao.BoardDAO;
 import com.crosswordapp.dao.CommentDAO;
 import com.crosswordapp.dao.StatsDAO;
@@ -88,6 +89,7 @@ public class UserService {
                 logger.error("Token for updating could not be found");
                 return new UserResponseRep(false, "Nonexistent account error.");
             } else {
+                LeaderboardCache.markLeaderboardChanged();
                 return new UserResponseRep(true, user);
             }
         } else {
