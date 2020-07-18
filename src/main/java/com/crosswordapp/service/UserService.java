@@ -66,6 +66,24 @@ public class UserService {
         }
     }
 
+    public UserResponseRep changeUsername(UserUsernameRep userRep) {
+        String conflict = userDAO.getUserConflict("", userRep.newUsername);
+        if ("".equals(conflict)) {
+            User user = userDAO.changeUsername(userRep.token, userRep.email, userRep.newUsername);
+            if (user == null) {
+                logger.error("Unable to update username, token and email are not found");
+                return new UserResponseRep(false, "Nonexistent account error.");
+            } else {
+                LeaderboardCache.markLeaderboardChanged();
+                return new UserResponseRep(true, user);
+            }
+        } else {
+            logger.error("Username conflict, the name " + userRep.newUsername + " is already taken");
+            return new UserResponseRep(false, conflict);
+        }
+
+    }
+
     public UserResponseRep changePassword(UserPasswordRep userRep) {
         if (userDAO.validatePassword(userRep.email, userRep.password) == null) {
             logger.error("Password incorrect for email: " + userRep.email);

@@ -41,6 +41,11 @@ public class UserResource {
         return userService.saveSettings(settings);
     }
 
+    @PutMapping(PATH + "/username")
+    public UserResponseRep changeUsername(@RequestBody UserUsernameRep user) {
+        return userService.changeUsername(user);
+    }
+
     @PutMapping(PATH + "/password")
     public UserResponseRep changePassword(@RequestBody UserPasswordRep user) {
         return userService.changePassword(user);

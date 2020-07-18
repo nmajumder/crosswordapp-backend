@@ -10,8 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -58,6 +56,9 @@ public class UserDAO {
     private final static String UPDATE_USER =
             "UPDATE users SET " + getFieldList(true, EMAIL_COL, USER_COL, PASSWORD_COL)
                     + " WHERE " + getFieldList(true, TOKEN_COL);
+    private final static String UPDATE_USERNAME =
+            "UPDATE users SET " + getFieldList(true, USER_COL)
+                    + " WHERE " + getFieldList(true, TOKEN_COL) + " AND " + getFieldList(true, EMAIL_COL);
     private final static String UPDATE_SETTINGS =
             "UPDATE users SET " + getFieldList(true, COLOR_SCHEME_COL, INACTIVITY_TIMER_COL)
                     + " WHERE " + getFieldList(true, TOKEN_COL);
@@ -184,6 +185,24 @@ public class UserDAO {
         }
     }
 
+    public User changeUsername(String token, String email, String newUsername) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(UPDATE_USERNAME)) {
+            ps.setString(1, newUsername);
+            ps.setString(2, token);
+            ps.setString(3, email);
+            int recordsUpdated = ps.executeUpdate();
+            if (recordsUpdated != 1) {
+                logger.error("Failed to update username, could not find user with email " + email + " and token " + token);
+                return null;
+            }
+            logger.info("Successfully updated username for user with email: " + email);
+            return validateToken(token);
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to change username for user with email: " + email, e);
+        }
+    }
+
     public User changePassword(String email, String newPassword) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
             PreparedStatement ps = conn.prepareStatement(UPDATE_PASSWORD)) {
@@ -197,7 +216,7 @@ public class UserDAO {
             logger.info("Successfully updated password for user with email: " + email);
             return validatePassword(email, newPassword);
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to find user with email: " + email, e);
+            throw new RuntimeException("Failed to change password for user with email: " + email, e);
         }
     }
 
