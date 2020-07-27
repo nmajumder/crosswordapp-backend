@@ -46,6 +46,12 @@ public class LeaderboardCache {
         }
     }
 
+    // run a leaderboard update each early morning to refresh streaks that have lapsed
+    @Scheduled(cron = "0 0 4 * * *")
+    private void dailyLeaderboardRefresh() {
+        instance.shouldUpdate = true;
+    }
+
     public static void markLeaderboardChanged() {
         instance.shouldUpdate = true;
     }
