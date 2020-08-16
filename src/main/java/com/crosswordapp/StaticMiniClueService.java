@@ -86,6 +86,7 @@ public class StaticMiniClueService {
 
         if (clueText.toLowerCase().contains("this puzzle")) return false;
         if (clueText.toLowerCase().contains("theme") && clueText.toLowerCase().contains("puzzle")) return false;
+        if (clueText.toLowerCase().contains("starred")) return false;
         if (clueText.contains("&lt;-")) return false;
         if (clueText.contains("*")) return false;
         if (clueText.startsWith("...")) return false;

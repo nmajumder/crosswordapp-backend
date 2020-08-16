@@ -56,11 +56,27 @@ public class Lexicon {
     // i.e. if one is a subset of the other
     private static void initSubsetMap() {
         subsetMap = new HashMap<>();
+        String word1;
+        String word2;
         for (int i = 0; i < wordList.size()-1; i++) {
-            subsetMap.put(i, new TreeSet<>());
+            if (!subsetMap.containsKey(i))
+                subsetMap.put(i, new TreeSet<>());
             for (int j = i+1; j < wordList.size(); j++) {
-                if (wordList.get(i).contains(wordList.get(j)) ||
-                    wordList.get(j).contains(wordList.get(i))) {
+                word1 = wordList.get(i);
+                word2 = wordList.get(j);
+                boolean areRelated = false;
+                if (word1.length() == word2.length()) {
+                    if (word1.length() == 3) continue;
+                    String base1 = word1.endsWith("D") || word1.endsWith("S") ? word1.substring(0, word1.length()-1) : word1;
+                    String base2 = word2.endsWith("D") || word2.endsWith("S") ? word2.substring(0, word2.length()-1) : word2;
+                    if (base1.equals(base2) || base1.contains(base2) || base2.contains(base1)) {
+                        areRelated = true;
+                    }
+                } else if (word1.contains(word2) || word2.contains(word1)) {
+                    areRelated = true;
+                }
+                // add the words to each other's subset lists
+                if (areRelated) {
                     subsetMap.get(i).add(j);
                     if (!subsetMap.containsKey(j))
                         subsetMap.put(j, new TreeSet<>());
