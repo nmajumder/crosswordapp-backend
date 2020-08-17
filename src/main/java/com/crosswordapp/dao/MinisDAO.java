@@ -9,6 +9,7 @@ import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -44,7 +45,10 @@ public class MinisDAO {
     private final static String GET_MINI_SOLUTION_FOR_USER =
             "SELECT " + getFieldList(false, "ALL") + " FROM miniboards"
                     + " WHERE " + getFieldList(true, USER_ID_COL);
+    private final static String DELETE_MINI_FOR_USER =
+            "DELETE FROM miniboards WHERE " + getFieldList(true, USER_ID_COL);
 
+    @Async
     public void createMini(String userId, MiniSolutionRep miniSolution) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(CREATE_MINI_ROW_FOR_USER)) {
@@ -61,6 +65,7 @@ public class MinisDAO {
         }
     }
 
+    @Async
     public void updateMini(String userId, MiniSolutionRep miniSolution) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(UPDATE_MINI_FOR_USER)) {
@@ -110,6 +115,25 @@ public class MinisDAO {
         }
     }
 
+    @Async
+    public void deleteMini(String userId) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(DELETE_MINI_FOR_USER)) {
+            ps.setString(1, userId);
+            int recordsUpdated = ps.executeUpdate();
+            if (recordsUpdated == 0) {
+                logger.warn("No mini board exists for user: " + userId);
+            } else if (recordsUpdated > 1) {
+                logger.error("More than one mini board (" + recordsUpdated + ") was found and deleted for user: " + userId);
+            } else {
+                logger.info("Successfully deleted mini board row for user: " + userId);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error deleting mini board row for user: " + userId, e);
+        }
+    }
+
+    @Async
     public void resetMini(String userId) {
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
              PreparedStatement ps = conn.prepareStatement(UPDATE_MINI_FOR_USER)) {
