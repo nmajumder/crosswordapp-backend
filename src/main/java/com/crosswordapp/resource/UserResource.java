@@ -18,11 +18,13 @@ public class UserResource {
 
     @PostMapping(PATH + "/create")
     public UserResponseRep createUser(@RequestBody UserCreateRep user) {
+        user.email = user.email.toLowerCase();
         return userService.createUser(user);
     }
 
     @PostMapping(PATH + "/login")
     public UserResponseRep loginUser(@RequestBody UserLoginRep user) {
+        user.email = user.email.toLowerCase();
         return userService.loginUser(user);
     }
 
@@ -33,6 +35,7 @@ public class UserResource {
 
     @PutMapping(PATH + "/link")
     public UserResponseRep linkUser(@RequestBody UserLinkRep user) {
+        user.newAccount.email = user.newAccount.email.toLowerCase();
         return userService.linkUser(user);
     }
 
@@ -43,16 +46,19 @@ public class UserResource {
 
     @PutMapping(PATH + "/username")
     public UserResponseRep changeUsername(@RequestBody UserUsernameRep user) {
+        user.email = user.email.toLowerCase();
         return userService.changeUsername(user);
     }
 
     @PutMapping(PATH + "/password")
     public UserResponseRep changePassword(@RequestBody UserPasswordRep user) {
+        user.email = user.email.toLowerCase();
         return userService.changePassword(user);
     }
 
     @PutMapping(PATH + "/password/reset")
     public UserResponseRep resetPassword(@RequestBody UserPasswordResetRep user) {
+        user.email = user.email.toLowerCase();
         return userService.resetPassword(user.email);
     }
 
